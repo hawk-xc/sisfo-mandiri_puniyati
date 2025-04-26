@@ -1,2 +1,2 @@
-# sisfo-mandiri_puniyati
-Sistem Informasi Klinik Mandiri Puniyati
+# Aplikasi Sistem Informasi Klinik Mandiri Puniyati
+Sistem yang dikembangkan bertujuan untuk mempermudah proses pendaftaran, pemeriksaan, dan pembayaran pasien di Bidan Praktik Mandiri Puniyati, A.Md Keb Mojolaban Sukoharjo. Alur sistem dimulai dengan identifikasi status pasien apakah baru atau lama. Jika pasien baru, data pasien diinputkan ke dalam sistem dan kartu berobat dicetak. Jika pasien lama, pencarian dilakukan berdasarkan nomor rekam medis; jika data tidak ditemukan, pasien akan didaftarkan ulang dengan nomor rekam medis baru. Setelah pendaftaran, hasil pemeriksaan, obat, dan tindakan medis dicatat ke dalam sistem. Terakhir, sistem mencatat pembayaran sebelum pasien diperbolehkan pulang.

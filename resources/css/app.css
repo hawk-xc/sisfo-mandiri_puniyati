@@ -1,0 +1,14 @@
+@import "remixicon/fonts/remixicon.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .dashboard-card {
+        @apply flex flex-row items-center md:justify-center flex-1 bg-white border-l-8 rounded-sm shadow-md md:p-5 max-sm:p-1 border-sky-300;
+    }
+
+    .dashboard-card-content {
+        @apply flex flex-col gap-2 max-sm:m-1;
+    }
+}

@@ -4,6 +4,14 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\PemeriksaanController;
+use App\Http\Controllers\dash\BidanController;
+use App\Http\Controllers\dash\ObatController;
+use App\Http\Controllers\dash\PasienController;
+use App\Http\Controllers\dash\PelayananController;
+use App\Http\Controllers\dash\PembayaranController;
+use App\Http\Controllers\dash\PendaftaranController;
+use App\Models\Pemeriksaan;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,9 +29,22 @@ Route::group([
 ], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('/laporan', LaporanController::class)->names([
-        'index' => 'laporan.index',
-    ])->middleware('role:kader|admin');
+    // Masterdata
+    Route::group(['prefix' => 'masterdata'], function() {
+        Route::resource('/masterdata/bidan', BidanController::class);
+        Route::resource('/masterdata/pasien', PasienController::class);
+        Route::resource('/masterdata/obat', ObatController::class);
+        Route::resource('/masterdata/pelayanan', PelayananController::class);
+    });
+
+    Route::resource('pendaftaran', PendaftaranController::class);
+    Route::resource('pemeriksaan', PemeriksaanController::class);
+    Route::resource('pembayaran', PembayaranController::class);
+    Route::resource('laporan', LaporanController::class);
+
+    // Route::resource('/laporan', LaporanController::class)->names([
+        // 'index' => 'laporan.index',
+    // ])->middleware('role:kader|admin');
 
     Route::group(['prefix' => 'laporan'], function () {
         Route::get('/data/pemeriksaan', [LaporanController::class, 'pemeriksaan_data'])->name('laporan.data.pemeriksaan');

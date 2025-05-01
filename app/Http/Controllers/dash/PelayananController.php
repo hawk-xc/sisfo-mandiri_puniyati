@@ -12,7 +12,7 @@ class PelayananController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.masterdata.pelayanan.index');
     }
 
     /**

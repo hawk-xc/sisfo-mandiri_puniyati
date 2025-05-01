@@ -12,7 +12,7 @@ class PemeriksaanController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.pemeriksaan.index');
     }
 
     /**

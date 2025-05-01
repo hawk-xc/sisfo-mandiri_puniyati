@@ -12,7 +12,7 @@ class ObatController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.masterdata.obat.index');
     }
 
     /**

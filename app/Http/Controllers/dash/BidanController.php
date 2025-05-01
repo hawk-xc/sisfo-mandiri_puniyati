@@ -12,7 +12,7 @@ class BidanController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.masterdata.bidan.index');
     }
 
     /**

@@ -12,7 +12,7 @@ class PelaporanController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.laporan.index');
     }
 
     /**

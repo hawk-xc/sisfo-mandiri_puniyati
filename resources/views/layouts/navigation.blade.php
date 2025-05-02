@@ -63,6 +63,17 @@
     <link rel="stylesheet" href="https://preline.co/assets/css/main.min.css">
 </head>
 
+@php
+    function isActive($page)
+    {
+        if ($page) {
+            return 'bg-slate-600 text-white hover:sg-slate-500';
+        } else {
+            return 'text-gray-800 hover:bg-gray-200';
+        }
+    }
+@endphp
+
 <body class="bg-gray-50 dark:bg-neutral-900">
     <!-- ========== HEADER ========== -->
     <header
@@ -293,8 +304,8 @@
                 <nav class="flex flex-col flex-wrap w-full p-3 hs-accordion-group" data-hs-accordion-always-open>
                     <ul class="flex flex-col space-y-1">
                         <li>
-                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 bg-gray-100 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
-                                href="#">
+                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 {{ isActive(request()->routeIs('dashboard')) }} text-sm rounded-lg focus:outline-hidden"
+                                href="{{ route('dashboard') }}">
                                 <i class="text-xl ri-home-3-line"></i>
                                 Dashboard
                             </a>
@@ -302,7 +313,7 @@
 
                         <li class="hs-accordion" id="users-accordion">
                             <button type="button"
-                                class="hs-accordion-toggle w-full text-start flex flex-row justify-between items-center gap-3 py-1 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                                class="hs-accordion-toggle w-full text-start flex flex-row justify-between items-center gap-3 py-1 px-2.5 rounded-lg focus:bg-gray-100 text-sm focus:outline-hidden"
                                 aria-expanded="true" aria-controls="users-accordion-child">
                                 <span class="flex flex-row items-center gap-3">
                                     <i class="text-xl ri-pie-chart-line"></i>
@@ -318,25 +329,25 @@
                                 <ul class="pt-1 space-y-1 hs-accordion-group ps-8" data-hs-accordion-always-open>
                                     <ul class="pt-1 space-y-1">
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg focus:outline-hidden hover:bg-gray-100"
                                                 href="#">
                                                 Data Bidan
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg focus:outline-hidden hover:bg-gray-100"
                                                 href="#">
                                                 Data Pasien
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg focus:outline-hidden hover:bg-gray-100"
                                                 href="#">
                                                 Data Pelayanan
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg focus:outline-hidden hover:bg-gray-100"
                                                 href="#">
                                                 Data Obat
                                             </a>
@@ -344,7 +355,7 @@
 
                                         {{-- <li class="hs-accordion" id="users-accordion-sub-1">
                                             <button type="button"
-                                                class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
+                                                class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
                                                 aria-expanded="true" aria-controls="users-accordion-sub-1-child">
                                                 Sub Menu 1
 
@@ -393,32 +404,32 @@
                         </li>
 
                         <li>
-                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
-                                href="#">
+                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 {{ isActive(request()->routeIs('pendaftaran.*')) }} text-sm rounded-lg focus:outline-hidden"
+                                href="{{ route('pendaftaran.index') }}">
                                 <i class="text-xl ri-user-line"></i>
                                 Pendaftaran Pasien
                             </a>
                         </li>
 
                         <li>
-                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
-                                href="#">
+                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm  {{ isActive(request()->routeIs('pemeriksaan.*')) }} rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
+                                href="{{ route('pemeriksaan.index') }}">
                                 <i class="text-xl ri-survey-line"></i>
                                 Pemeriksaan
                             </a>
                         </li>
 
                         <li>
-                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
-                                href="#">
+                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm  {{ isActive(request()->routeIs('pembayaran.*')) }} rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
+                                href="{{ route('pembayaran.index') }}">
                                 <i class="text-xl ri-coins-line"></i>
                                 Pembayaran
                             </a>
                         </li>
 
                         <li>
-                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
-                                href="#">
+                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm  {{ isActive(request()->routeIs('laporan.*')) }} rounded-lg hover:bg-gray-200 focus:outline-hidden focus:bg-gray-100"
+                                href="{{ route('laporan.index') }}">
                                 <i class="text-xl ri-database-line"></i>
                                 Laporan
                             </a>

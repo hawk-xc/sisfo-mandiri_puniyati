@@ -12,38 +12,42 @@ class PemeriksaanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $sort = $request->query('sort', 'asc');
-        $search = $request->query('search');
+    // public function index(Request $request)
+    // {
+    //     $sort = $request->query('sort', 'asc');
+    //     $search = $request->query('search');
 
-        $query = Pemeriksaan::with(['lansia', 'pemeriksaanGizi'])
-            ->orderBy('created_at', $sort);
+    //     $query = Pemeriksaan::with(['lansia', 'pemeriksaanGizi'])
+    //         ->orderBy('created_at', $sort);
 
-        if (auth()->user()->checkRole() === 3) {
-            $user_id = auth()->user()->id;
+    //     if (auth()->user()->checkRole() === 3) {
+    //         $user_id = auth()->user()->id;
 
-            $query->whereHas('lansia.user', function ($q) use ($user_id) {
-                $q->where('id', $user_id);
-            });
-        }
+    //         $query->whereHas('lansia.user', function ($q) use ($user_id) {
+    //             $q->where('id', $user_id);
+    //         });
+    //     }
 
-        if ($search) {
-            $query->whereHas('lansia', function ($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%");
-            });
-        }
+    //     if ($search) {
+    //         $query->whereHas('lansia', function ($q) use ($search) {
+    //             $q->where('nama', 'like', "%{$search}%");
+    //         });
+    //     }
 
-        $pemeriksaan = $query->paginate(10);
+    //     $pemeriksaan = $query->paginate(10);
 
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('Admin.Pemeriksaan.partials.pemeriksaan_table', compact('pemeriksaan'))->render(),
-                'pagination' => $pemeriksaan->links()->toHtml()
-            ]);
-        }
+    //     if ($request->ajax()) {
+    //         return response()->json([
+    //             'html' => view('Admin.Pemeriksaan.partials.pemeriksaan_table', compact('pemeriksaan'))->render(),
+    //             'pagination' => $pemeriksaan->links()->toHtml()
+    //         ]);
+    //     }
 
-        return view('Admin.Pemeriksaan.index', compact('pemeriksaan', 'sort'));
+    //     return view('Admin.Pemeriksaan.index', compact('pemeriksaan', 'sort'));
+    // }
+
+    public function index() {
+        return view('dashboard.pemeriksaan.index');
     }
 
     /**

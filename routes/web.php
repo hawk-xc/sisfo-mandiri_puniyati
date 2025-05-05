@@ -31,10 +31,10 @@ Route::group([
 
     // Masterdata
     Route::group(['prefix' => 'masterdata'], function() {
-        Route::resource('/masterdata/bidan', BidanController::class);
-        Route::resource('/masterdata/pasien', PasienController::class);
-        Route::resource('/masterdata/obat', ObatController::class);
-        Route::resource('/masterdata/pelayanan', PelayananController::class);
+        Route::resource('/bidan', BidanController::class);
+        Route::resource('/pasien', PasienController::class);
+        Route::resource('/obat', ObatController::class);
+        Route::resource('/pelayanan', PelayananController::class);
     });
 
     Route::resource('pendaftaran', PendaftaranController::class);

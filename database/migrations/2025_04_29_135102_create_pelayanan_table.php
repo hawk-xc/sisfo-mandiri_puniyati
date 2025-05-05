@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('pelayanan', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
+            $table->enum('nama', ['anc', 'kia', 'ibu nifas', 'kb', 'umum'])->nullable(false);
+            $table->string('biaya')->nullable(true)->default(0);
             $table->timestamps();
         });
     }

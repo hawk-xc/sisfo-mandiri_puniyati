@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('obat', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
+            $table->string('nama', 50);
+            $table->enum('jenis', ['tablet', 'sirup', 'kapsul', 'salep', 'injeksi', 'suppositoria']);
+            $table->integer('stok')->default(0);
+            $table->string('harga_beli');
+            $table->string('harga_jual');
             $table->timestamps();
         });
     }

@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('bidan', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
+            $table->string('nama', 50)->nullable(false);
+            $table->string('alamat', 100)->nullable(true);
+            $table->string('no_telp', 13)->nullable(true);
+            $table->string('jadwal_praktek')->nullable(true);
             $table->timestamps();
         });
     }

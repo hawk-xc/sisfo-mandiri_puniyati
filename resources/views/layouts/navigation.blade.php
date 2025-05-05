@@ -312,7 +312,7 @@
 
                         <li class="hs-accordion" id="users-accordion">
                             <button type="button"
-                                class="hs-accordion-toggle w-full text-start flex flex-row justify-between items-center gap-3 py-1 px-2.5 rounded-lg {{ isActive(request()->routeIs('masterdata')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                class="hs-accordion-toggle w-full text-start flex flex-row justify-between items-center gap-3 py-1 px-2.5 rounded-lg {{ isActive(request()->is('dashboard/masterdata/*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
                                 aria-expanded="true" aria-controls="users-accordion-child">
                                 <span class="flex flex-row items-center gap-3">
                                     <i class="text-xl ri-pie-chart-line"></i>
@@ -328,25 +328,25 @@
                                 <ul class="pt-1 space-y-1 hs-accordion-group ps-8" data-hs-accordion-always-open>
                                     <ul class="pt-1 space-y-1">
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('masterdata')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="#">
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('bidan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                                href="{{ route('bidan.index') }}">
                                                 Data Bidan
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('masterdata')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pasien.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
                                                 href="#">
                                                 Data Pasien
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('masterdata')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pelayanan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
                                                 href="#">
                                                 Data Pelayanan
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('masterdata')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('obat.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
                                                 href="#">
                                                 Data Obat
                                             </a>

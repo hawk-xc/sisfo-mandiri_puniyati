@@ -31,7 +31,6 @@ class User extends Authenticatable
         'password',
         'raw_password',
         'role_id',
-        'lansia_id'
     ];
 
     /**
@@ -55,21 +54,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    // relasi ke Lansia = 1 to M
-    public function lansias()
-    {
-        return $this->hasMany(Lansia::class);
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    public function checkRole()
-    {
-        return $this->role_id;
     }
 }

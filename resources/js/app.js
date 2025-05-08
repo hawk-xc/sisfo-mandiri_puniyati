@@ -1,6 +1,8 @@
 import './bootstrap';
 import 'remixicon/fonts/remixicon.css';
 import './doughnut.js';
+import './bootstrap';
+import 'laravel-datatables-vite';
 
 import Alpine from 'alpinejs';
 

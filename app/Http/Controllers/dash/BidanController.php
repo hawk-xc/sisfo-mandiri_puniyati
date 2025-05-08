@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers\dash;
 
+use App\DataTables\BidanDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Bidan;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BidanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(BidanDataTable $dataTable)
     {
-        return view('dashboard.masterdata.bidan.index');
+        return $dataTable->render('dashboard.masterdata.bidan.index', [
+            'title' => 'Data Bidan'
+        ]);
     }
 
     /**
@@ -20,23 +26,71 @@ class BidanController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.masterdata.bidan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'bidan_picture' => 'nullable|file|image|max:2048', // opsional, bisa disesuaikan
+            'nama' => 'required|string',
+            'alamat' => 'required|string',
+            'no_telp' => 'required|string',
+            'jadwal_praktek.*' => 'nullable|string'
+        ], [
+            'bidan_picture.nullable' => 'Foto bidan bersifat opsional.',
+            'bidan_picture.image' => 'File harus berupa gambar.',
+            'bidan_picture.max' => 'Ukuran gambar maksimal 2MB.',
+            'nama.required' => 'Nama bidan wajib diisi.',
+            'nama.string' => 'Nama bidan harus berupa teks.',
+            'alamat.required' => 'Alamat bidan wajib diisi.',
+            'alamat.string' => 'Alamat bidan harus berupa teks.',
+            'no_telp.required' => 'Nomor telepon bidan wajib diisi.',
+            'no_telp.string' => 'Nomor telepon bidan harus berupa teks.',
+            'jadwal_praktek.*.nullable' => 'Jadwal praktek bersifat opsional.',
+            'jadwal_praktek.*.string' => 'Jadwal praktek harus berupa teks.'
+        ]);
+
+        try {
+            // Ubah array jadwal_praktek menjadi string dipisah koma
+            $jadwalPraktek = implode(',', $request->input('jadwal_praktek', []));
+
+            $filename = null;
+
+            // Jika ada file bidan_picture diupload
+            if ($request->hasFile('bidan_picture')) {
+                $file = $request->file('bidan_picture');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('bidan_', $filename, 'public');
+            }
+
+            // Simpan ke database
+            Bidan::create([
+                'bidan_picture' => $filename,
+                'nama' => $request->input('nama'),
+                'alamat' => $request->input('alamat'),
+                'no_telp' => $request->input('no_telp'),
+                'jadwal_praktek' => $jadwalPraktek
+            ]);
+
+            return redirect()->route('bidan.index')->with('success', 'Data bidan berhasil disimpan.');
+        } catch (\Exception $e) {
+            return redirect()->route('bidan.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $data = Bidan::findOrFail($id);
+
+        return view('dashboard.masterdata.bidan.show', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -44,7 +98,11 @@ class BidanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Bidan::findOrFail($id);
+
+        return view('dashboard.masterdata.bidan.edit', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -52,14 +110,73 @@ class BidanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'bidan_picture' => 'nullable|file|image|max:2048',
+            'nama' => 'required|string',
+            'alamat' => 'required|string',
+            'no_telp' => 'required|string',
+            'jadwal_praktek.*' => 'nullable|string'
+        ], [
+            'bidan_picture.nullable' => 'Foto bidan bersifat opsional.',
+            'bidan_picture.image' => 'File harus berupa gambar.',
+            'bidan_picture.max' => 'Ukuran gambar maksimal 2MB.',
+            'nama.required' => 'Nama bidan wajib diisi.',
+            'nama.string' => 'Nama bidan harus berupa teks.',
+            'alamat.required' => 'Alamat bidan wajib diisi.',
+            'alamat.string' => 'Alamat bidan harus berupa teks.',
+            'no_telp.required' => 'Nomor telepon bidan wajib diisi.',
+            'no_telp.string' => 'Nomor telepon bidan harus berupa teks.',
+            'jadwal_praktek.*.nullable' => 'Jadwal praktek bersifat opsional.',
+            'jadwal_praktek.*.string' => 'Jadwal praktek harus berupa teks.'
+        ]);
+
+        try {
+            $bidan = Bidan::findOrFail($id);
+
+            $filename = $bidan->bidan_picture; // default gunakan gambar lama
+
+            // Jika user upload gambar baru
+            if ($request->hasFile('bidan_picture')) {
+                $file = $request->file('bidan_picture');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('bidan_', $filename, 'public');
+
+                // Opsional: hapus gambar lama dari storage jika diperlukan
+                // Storage::disk('public')->delete('bidan_/' . $bidan->bidan_picture);
+            }
+
+            $jadwalPraktek = implode(',', $request->input('jadwal_praktek', []));
+
+            $bidan->update([
+                'bidan_picture' => $filename,
+                'nama' => $request->input('nama'),
+                'alamat' => $request->input('alamat'),
+                'no_telp' => $request->input('no_telp'),
+                'jadwal_praktek' => $jadwalPraktek
+            ]);
+
+            return redirect()->route('bidan.index')->with('success', 'Data bidan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('bidan.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $data = Bidan::findOrFail($id);
+
+        if (isset($data)) {
+            try {
+                $data->delete();
+
+                return redirect()->route('bidan.index')->with('success', 'Data bidan berhasil dihapus.');
+            } catch (Exception $e) {
+                return redirect()->route('bidan.index')->with('error', 'Data bidan gagal dihapus.');
+            }
+        }
     }
 }

@@ -55,6 +55,8 @@ Route::group([
         Route::get('/export/{type}', [LaporanController::class, 'export'])
             ->name('laporan.export');
     });
+
+    Route::get('/datatable/bidan', [BidanController::class, 'datatableAll'])->name('datatable.bidan');
 });
 
 

@@ -335,13 +335,13 @@
                                         </li>
                                         <li>
                                             <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pasien.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="#">
+                                                href="{{ route('pasien.index') }}">
                                                 Data Pasien
                                             </a>
                                         </li>
                                         <li>
                                             <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pelayanan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="#">
+                                                href="{{ route('pelayanan.index') }}">
                                                 Data Pelayanan
                                             </a>
                                         </li>

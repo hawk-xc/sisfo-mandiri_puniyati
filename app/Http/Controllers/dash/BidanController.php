@@ -84,14 +84,15 @@ class BidanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $data = Bidan::findOrFail($id);
+    // disable show method
+    // public function show(string $id)
+    // {
+    //     $data = Bidan::findOrFail($id);
 
-        return view('dashboard.masterdata.bidan.show', [
-            'data' => $data
-        ]);
-    }
+    //     return view('dashboard.masterdata.bidan.show', [
+    //         'data' => $data
+    //     ]);
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -133,16 +134,13 @@ class BidanController extends Controller
         try {
             $bidan = Bidan::findOrFail($id);
 
-            $filename = $bidan->bidan_picture; // default gunakan gambar lama
+            $filename = $bidan->bidan_picture;
 
             // Jika user upload gambar baru
             if ($request->hasFile('bidan_picture')) {
                 $file = $request->file('bidan_picture');
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $file->storeAs('bidan_', $filename, 'public');
-
-                // Opsional: hapus gambar lama dari storage jika diperlukan
-                // Storage::disk('public')->delete('bidan_/' . $bidan->bidan_picture);
             }
 
             $jadwalPraktek = implode(',', $request->input('jadwal_praktek', []));

@@ -60,39 +60,39 @@ class BidanDataTable extends DataTable
      * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
-{
-    return $this->builder()
-        ->setTableId('bidan-table')
-        ->columns($this->getColumns())
-        ->minifiedAjax()
-        ->addTableClass('table-auto w-full border-collapse border border-gray-200 shadow-sm rounded-lg')
-        ->orderBy(1)
-        ->selectStyleSingle()
-        ->buttons([
-            Button::make('print')
-                ->addClass('btn btn-warning')
-                ->text('<i class="fas fa-print"></i> Print'),
-            Button::make('reload')
-                ->addClass('btn btn-accent')
-                ->text('<i class="fas fa-redo"></i> Reload')
-        ])
-        ->parameters([
-            'language' => [
-                'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
-            ],
-            'responsive' => true,
-            'autoWidth' => false,
-            'lengthMenu' => [
-                [10, 25, 50, 100, -1],
-                [10, 25, 50, 100, 'Semua']
-            ],
-            'dom' => "<'dt-controls-wrapper mb-6 p-4 flex flex-wrap justify-between items-center gap-4'lfB>rt<'dt-footer-wrapper mt-6'p>",
+    {
+        return $this->builder()
+            ->setTableId('bidan-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->addTableClass('table-auto w-full border-collapse border border-gray-200 shadow-sm rounded-lg')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('print')
+                    ->addClass('btn btn-warning')
+                    ->text('<i class="fas fa-print"></i> Print'),
+                Button::make('reload')
+                    ->addClass('btn btn-accent')
+                    ->text('<i class="fas fa-redo"></i> Reload')
+            ])
+            ->parameters([
+                'language' => [
+                    'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
+                ],
+                'responsive' => true,
+                'autoWidth' => false,
+                'lengthMenu' => [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, 'Semua']
+                ],
+                'dom' => "<'dt-controls-wrapper mb-6 p-4 flex flex-wrap justify-between items-center gap-4'lfB>rt<'dt-footer-wrapper mt-6'p>",
 
-            'initComplete' => "function(settings, json) {
-                $(this.api().table().container()).addClass('rounded-lg p-2 border');
-            }"
-        ]);
-}
+                'initComplete' => "function(settings, json) {
+                    $(this.api().table().container()).addClass('rounded-lg p-2 border');
+                }"
+            ]);
+    }
 
 
     /**

@@ -1,20 +1,29 @@
 <x-app-layout>
-    <div>
-        <div class="text-sm breadcrumbs">
-            <ul class="font-light">
-                <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li><a href="#">Masterdata</a></li>
-                <li>Bidan</li>
-            </ul>
-        </div>
-        <div class="flex flex-col mx-auto bg-white rounded-sm shadow-sm">
-            <div class="flex flex-row items-center justify-between w-full p-3 align-middle bg-white">
-                <h3 class="flex-1 text-xl">Masterdata Bidan</h3>
-                <button class="btn btn-sm btn-primary"><i class="ri-add-line"></i> Tambah Baru</button>
-            </div>
-            <hr />
-            <div class="p-3 bg-white">
+    <div class="p-6">
+        <div class="shadow-xl card bg-base-100">
+            <div class="card-body">
+                <div id="head" class="flex flex-row justify-between">
+                    <h2 class="mb-6 text-2xl font-bold card-title">Data Bidan</h2>
+                    <a href="{{ route('bidan.create') }}" class="btn btn-primary">
+                        <i class="ri-add-line"></i> Tambah data
+                    </a>
+                </div>
+                {{ $dataTable->table(['class' => 'w-full table table-zebra mt-2 hover:table-auto']) }}
             </div>
         </div>
     </div>
+
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('assets/plugins/datatable/css/jquery.dataTables.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}">
+    @endpush
+
+    @push('scripts')
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script src={{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}></script>
+        <script src={{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}></script>
+        <script src={{ asset('assets/plugins/datatable/js/dataTables.dataTables.min.js') }}></script>
+        <script src={{ asset('assets/plugins/datatable/js/dataTables.responsive.min.js') }}></script>
+        {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    @endpush
 </x-app-layout>

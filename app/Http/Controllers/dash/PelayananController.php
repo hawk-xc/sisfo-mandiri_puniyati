@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\dash;
 
+use App\DataTables\PelayananDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Pelayanan;
+use Exception;
 use Illuminate\Http\Request;
 
 class PelayananController extends Controller
@@ -10,9 +13,11 @@ class PelayananController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PelayananDataTable $dataTable)
     {
-        return view('dashboard.masterdata.pelayanan.index');
+        return $dataTable->render('dashboard.masterdata.pelayanan.index', [
+            'title' => 'Data Pelayanan'
+        ]);
     }
 
     /**
@@ -20,7 +25,7 @@ class PelayananController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.masterdata.pelayanan.create');
     }
 
     /**
@@ -28,7 +33,27 @@ class PelayananController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_pelayanan' => 'required|string',
+            'biaya' => 'required|numeric'
+        ], [
+            'nama_pelayanan.required' => 'Nama pelayanan wajib diisi.',
+            'nama_pelayanan.string' => 'Nama pelayanan harus berupa teks.',
+            'biaya.required' => 'Biaya wajib diisi.',
+            'biaya.numeric' => 'Biaya harus berupa angka.'
+        ]);
+
+        try {
+            Pelayanan::create([
+                'nama' => $request->nama_pelayanan,
+                'biaya' => $request->biaya
+            ]);
+
+            return redirect()->route('pelayanan.index')->with('success', 'Data Pelayanan berhasil disimpan.');
+        }
+        catch (Exception $e) {
+            return redirect()->route('pelayanan.index')->with('error', 'Data Pelayanan gagal disimpan. -> ' . $e);
+        }
     }
 
     /**

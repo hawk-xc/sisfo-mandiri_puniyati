@@ -347,7 +347,7 @@
                                         </li>
                                         <li>
                                             <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('obat.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="#">
+                                                href="{{ route('obat.index') }}">
                                                 Data Obat
                                             </a>
                                         </li>

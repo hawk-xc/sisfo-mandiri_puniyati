@@ -41,9 +41,6 @@ class PasienDataTable extends DataTable
             ->editColumn('created_at', function($pasien) {
                 return '<span class="badge badge-ghost">'.$pasien->created_at->format('d-m-Y H:i').'</span>';
             })
-            ->editColumn('uuid', function($pasien) {
-                return 'RM-' . $pasien->uuid;
-            })
             ->rawColumns(['action', 'created_at', 'updated_at'])
             ->setRowId('id');
     }
@@ -104,9 +101,6 @@ class PasienDataTable extends DataTable
         return [
             Column::make('nama')
                 ->addClass('font-medium'),
-            Column::make('uuid')
-                ->title('No Rekam Medis')
-                ->addClass('text-start'),
             Column::make('alamat')
                 ->title('Alamat')
                 ->addClass('text-start'),

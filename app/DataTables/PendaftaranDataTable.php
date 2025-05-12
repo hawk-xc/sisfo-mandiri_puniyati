@@ -22,9 +22,9 @@ class PendaftaranDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function($pasien) {
-                $editUrl = route('pasien.edit', $pasien->id);
-                $deleteUrl = route('pasien.destroy', $pasien->id);
+            ->addColumn('action', function($pendaftaran) {
+                $editUrl = route('pendaftaran.edit', $pendaftaran->id);
+                $deleteUrl = route('pendaftaran.destroy', $pendaftaran->id);
 
                 return '<div class="flex space-x-2">
                     <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
@@ -41,7 +41,11 @@ class PendaftaranDataTable extends DataTable
             ->editColumn('created_at', function($pendaftaran) {
                 return '<span class="badge badge-ghost">'.$pendaftaran->created_at->format('d-m-Y H:i').'</span>';
             })
-            ->rawColumns(['action', 'created_at', 'updated_at'])
+            ->editColumn('status', function($pendaftaran) {
+                $statusClass = $pendaftaran->status === 'selesai' ? 'badge-success' : 'badge-primary';
+                return '<span class="badge '.$statusClass.'">'.ucfirst($pendaftaran->status).'</span>';
+            })
+            ->rawColumns(['action', 'created_at', 'status', 'updated_at'])
             ->setRowId('id');
     }
 
@@ -111,6 +115,8 @@ class PendaftaranDataTable extends DataTable
             Column::make('created_at')
                 ->title('Tanggal Pemeriksaan')
                 ->addClass('text-start font-semibold'),
+            Column::make('status')
+                ->title('Status'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

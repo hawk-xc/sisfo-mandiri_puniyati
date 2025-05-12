@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Pendaftaran;
 use Illuminate\Database\Eloquent\Model;
 
 class Pasien extends Model
@@ -34,4 +35,9 @@ class Pasien extends Model
         'penanggung_jawab',
         'golda'
     ];
+
+    public function pendaftaran()
+    {
+        $this->belonsTo(Pendaftaran::class, 'id', 'pasien_id');
+    }
 }

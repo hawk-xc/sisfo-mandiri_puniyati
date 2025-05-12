@@ -35,7 +35,7 @@ class PendaftaranController extends Controller
      */
     public function store(Request $request)
     {
-        $noRm = Pendaftaran::where('no_rm', $request->input('no_rm'));
+        $noRm = Pendaftaran::where('no_rm', $request->input('no_rm'))->first();
 
         if ($noRm->exists()) {
             $request->validate([
@@ -52,8 +52,8 @@ class PendaftaranController extends Controller
 
             try {
                 $data = new Pendaftaran;
-                $data->pasien_id = $noRm->pasien->id;
                 $data->no_rm = $noRm->no_rm;
+                $data->pasien_id = $noRm->pasien->id;
                 $data->tanggal = $request->tanggal;
                 $data->status = $request->status;
 
@@ -139,7 +139,11 @@ class PendaftaranController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Pendaftaran::findOrFail($id)->first()->with('pasien');
+
+        return view('dashboard.pendaftaran.show', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -147,7 +151,11 @@ class PendaftaranController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Pendaftaran::with('pasien')->findOrFail($id);
+
+        return view('dashboard.pendaftaran.edit', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -155,7 +163,30 @@ class PendaftaranController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+                'tanggal' => 'required|date',
+                'status' => 'required|in:selesai,menunggu'
+        ], [
+            [
+                'tanggal.required' => 'Tanggal harus diisi.',
+                'tanggal.date' => 'Tanggal harus berupa format tanggal yang valid.',
+                'status.required' => 'Status harus diisi.',
+                'status.in' => 'Status harus berupa salah satu dari: selesai, menunggu.'
+            ]
+        ]);
+
+        try {
+            $data = Pendaftaran::findOrFail($id);
+
+            $data->tanggal = $request->tanggal;
+            $data->status = $request->status;
+
+            $data->save();
+
+            return redirect()->route('pendaftaran.index')->with('success', 'Berhasil update data Pendaftaran');
+        } catch (Exception $e) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Gagal update data Pendaftaran');
+        }
     }
 
     /**
@@ -163,7 +194,15 @@ class PendaftaranController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Pendaftaran::findOrFail($id);
+
+        try {
+            $data->delete();
+
+            return redirect()->route('pendaftaran.index')->with('success', 'Berhasil menghapus data Pendaftaran');
+        } catch (Exception $e) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Gagal menghapus data Pendaftaran!');
+        }
     }
 
     public function selectRm(Request $request)
@@ -172,15 +211,19 @@ class PendaftaranController extends Controller
 
         $data = Pendaftaran::with('pasien')
             ->where('no_rm', 'like', '%' . $search)
-            ->limit(10)
-            ->get()
-            ->map(function($item) {
-                return [
-                    'id' => $item->no_rm,
-                    'text' => $item->no_rm . ' - ' . $item->pasien->nama,
-                    'pasien' => $item->pasien
-                ];
-            });
+            ->first();
+
+        if ($data) {
+            $data = [
+            [
+                'id' => $data->no_rm,
+                'text' => $data->no_rm . ' - ' . $data->pasien->nama,
+                'pasien' => $data->pasien
+            ]
+            ];
+        } else {
+            $data = [];
+        }
 
         return response()->json(['results' => $data]);
     }

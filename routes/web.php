@@ -58,6 +58,10 @@ Route::group([
 
     Route::get('/datatable/bidan', [BidanController::class, 'datatableAll'])->name('datatable.bidan');
     Route::get('/datatable/pasien', [PasienController::class, 'datatableAll'])->name('datatable.pasien');
+
+    Route::group(['prefix' => 'select2'], function () {
+        Route::get('pendaftaran', [Pendaftarancontroller::class, 'selectRm'])->name('dashboard.select2.pendaftaran');
+    });
 });
 
 

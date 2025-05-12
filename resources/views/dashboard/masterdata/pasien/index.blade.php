@@ -4,9 +4,9 @@
             <div class="card-body">
                 <div id="head" class="flex flex-row justify-between">
                     <h2 class="mb-6 text-2xl font-bold card-title">Data Pasien</h2>
-                    <a href="{{ route('pasien.create') }}" class="btn btn-primary">
+                    {{-- <a href="{{ route('pasien.create') }}" class="btn btn-primary">
                         <i class="ri-add-line"></i> Tambah data
-                    </a>
+                    </a> --}}
                 </div>
                 {{ $dataTable->table(['class' => 'w-full table table-zebra mt-2 hover:table-auto']) }}
             </div>

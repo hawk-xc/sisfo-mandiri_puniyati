@@ -22,9 +22,9 @@ class PemeriksaanDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function($pasien) {
-                $editUrl = route('pasien.edit', $pasien->id);
-                $deleteUrl = route('pasien.destroy', $pasien->id);
+            ->addColumn('action', function($pemeriksaan) {
+                $editUrl = route('pemeriksaan.edit', $pemeriksaan->id);
+                $deleteUrl = route('pemeriksaan.destroy', $pemeriksaan->id);
 
                 return '<div class="flex space-x-2">
                     <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
@@ -38,8 +38,8 @@ class PemeriksaanDataTable extends DataTable
                     </form>
                 </div>';
             })
-            ->editColumn('created_at', function($pasien) {
-                return '<span class="badge badge-ghost">'.$pasien->created_at->format('d-m-Y H:i').'</span>';
+            ->editColumn('created_at', function($pemeriksaan) {
+                return '<span class="badge badge-ghost">'.$pemeriksaan->created_at->format('d-m-Y H:i').'</span>';
             })
             ->rawColumns(['action', 'created_at', 'updated_at'])
             ->setRowId('id');
@@ -52,7 +52,7 @@ class PemeriksaanDataTable extends DataTable
      */
     public function query(Pemeriksaan $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with(['pendaftaran', 'bidan', 'pelayanan']);
     }
 
     /**
@@ -61,7 +61,7 @@ class PemeriksaanDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('pasien-table')
+            ->setTableId('pendaftaran-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->addTableClass('table-auto w-full border-collapse border border-gray-200 shadow-sm rounded-lg')
@@ -99,16 +99,14 @@ class PemeriksaanDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('nama')
+            Column::make('pendaftaran.pasien.nama')
+                ->title('Nama Pasien')
                 ->addClass('font-medium'),
-            Column::make('alamat')
-                ->title('Alamat')
+            Column::make('bidan.nama')
+                ->title('Nama Bidan')
                 ->addClass('text-start'),
-            Column::make('penanggung_jawab')
-                ->title('Penanggung Jawab')
-                ->addClass('text-start font-semibold'),
-            Column::make('no_telp')
-                ->title('No Telp')
+            Column::make('pelayanan.nama')
+                ->title('Pelayanan')
                 ->addClass('text-start font-semibold'),
             Column::make('created_at')
                 ->title('Dibuat')

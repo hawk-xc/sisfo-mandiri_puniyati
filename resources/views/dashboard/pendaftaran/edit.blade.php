@@ -160,7 +160,8 @@
                             {{-- input jenis status --}}
                             <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Status</legend>
-                                <select name="status" class="w-full select">
+                                <select name="status" class="w-full select"
+                                    disabled={{ $data->status === 'selesai' }}>
                                     <option value="" disabled>Pilih Status Pendaftaran</option>
                                     <option value="menunggu"
                                         {{ old('status', $data->status) == 'menunggu' ? 'selected' : '' }}>

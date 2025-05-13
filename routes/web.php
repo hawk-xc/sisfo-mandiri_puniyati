@@ -4,7 +4,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\LaporanController;
-use App\Http\Controllers\Admin\PemeriksaanController;
+use App\Http\Controllers\dash\PemeriksaanController;
 use App\Http\Controllers\dash\BidanController;
 use App\Http\Controllers\dash\ObatController;
 use App\Http\Controllers\dash\PasienController;

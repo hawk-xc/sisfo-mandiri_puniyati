@@ -18,7 +18,7 @@ class PendaftaranController extends Controller
     public function index(PendaftaranDataTable $dataTable)
     {
         return $dataTable->render('dashboard.pendaftaran.index', [
-            'title' => 'Data Pelayanan'
+            'title' => 'Data Pendaftaran',
         ]);
     }
 

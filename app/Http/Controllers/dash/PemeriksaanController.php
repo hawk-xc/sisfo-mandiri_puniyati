@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\dash;
 
+use App\DataTables\PemeriksaanDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Pemeriksaan;
+use Exception;
 use Illuminate\Http\Request;
 
 class PemeriksaanController extends Controller
@@ -10,9 +13,11 @@ class PemeriksaanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PemeriksaanDataTable $dataTable)
     {
-        return view('dashboard.pemeriksaan.index');
+        return $dataTable->render('dashboard.pemeriksaan.index', [
+            'title' => 'Data Pemeriksaan'
+        ]);
     }
 
     /**
@@ -20,7 +25,7 @@ class PemeriksaanController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.pemeriksaan.create');
     }
 
     /**
@@ -28,7 +33,7 @@ class PemeriksaanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -36,7 +41,11 @@ class PemeriksaanController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Pemeriksaan::findOrFail($id)->with(['pasien', 'bidan', 'pelayanan'])->first();
+        return view('dashboard.pemeriksaan.show', [
+            'title' => 'Detail Pemeriksaan',
+            'data' => $data
+        ]);
     }
 
     /**
@@ -44,7 +53,12 @@ class PemeriksaanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Pemeriksaan::findOrFail($id);
+
+        return view('dashboard.pemeriksaan.edit', [
+            'title' => 'Edit Pemeriksaan',
+            'data' => $data
+        ]);
     }
 
     /**
@@ -52,7 +66,9 @@ class PemeriksaanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $pemeriksaanId = $id;
+
+        dd($request->all());
     }
 
     /**
@@ -60,6 +76,14 @@ class PemeriksaanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Pemeriksaan::findOrFail($id);
+
+        try {
+            $data->delete();
+
+            return redirect()->route('pemeriksaan.index')->with('success', 'Data Pemeriksaan Berhasil Dihapus');
+        } catch (Exception $e) {
+            return redirect()->route('pemeriksaan.index')->with('error', 'Data Pemeriksaan Gagal Dihapus');
+        }
     }
 }

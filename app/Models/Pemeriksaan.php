@@ -53,7 +53,7 @@ class Pemeriksaan extends Model
         'infeksi',
         'diagnosa',
         'tindakan',
-        'tanggal_kontrol',
+        'tanggal_kontrol'
     ];
 
     public function pendaftaran()

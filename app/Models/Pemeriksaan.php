@@ -10,44 +10,64 @@ class Pemeriksaan extends Model
     use HasFactory;
 
     protected $table = 'pemeriksaan';
-    protected $guarded = ['id'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uuid = (string) \Illuminate\Support\Str::uuid();
+        });
+    }
+
 
     protected $fillable = [
-        'imt',
-        'id_pemeriksaan',
-        'lansia_id',
-        'berat_badan',
-        'tinggi_badan',
-        'tanggal_pemeriksaan',
-        'tensi_sistolik',
-        'tensi_diastolik',
-        'analisis_imt',
-        'analisis_tensi',
-        'keterangan',
-
-        // new Column
-        'mentality_check',
-        'healthy_check',
-        'hospital_referral',
-        'kader_name',
-        'gula_darah',
-        'lingkar_perut'
+        'pendaftaran_id',
+        'pembayaran_id',
+        'bidan_id',
+        'pelayanan_id',
+        'keluhan',
+        'riwayat',
+        'riwayat_imunisasi',
+        'tensi',
+        'bb',
+        'tb',
+        'suhu_badan',
+        'saturasi_oksigen',
+        'lila',
+        'hpht',
+        'gpa',
+        'umur_kehamilan',
+        'lingkar_perut',
+        'tinggi_fundus',
+        'jumlah_anak',
+        'persalinan_terakhir',
+        'djj',
+        'refla',
+        'lab',
+        'tanggal_melahirkan',
+        'tempat_persalinan',
+        'bantu_persalinan',
+        'besar_rahim',
+        'cairan_keluar',
+        'infeksi',
+        'diagnosa',
+        'tindakan',
+        'tanggal_kontrol',
     ];
 
-    public function lansia()
+    public function pendaftaran()
     {
-        return $this->belongsTo(Lansia::class);
+        return $this->hasOne(Pendaftaran::class, 'id', 'pendaftaran_id');
     }
 
-    public function gizi()
+    public function bidan()
     {
-        return $this->belongsToMany(Gizi::class, 'pemeriksaan_gizi', 'pemeriksaan_id', 'gizi_id')
-            ->withTimestamps();
+        return $this->hasOne(Bidan::class, 'id', 'bidan_id');
     }
 
-    // Alternative if you need to access the pivot as a model
-    public function pemeriksaanGizi()
+    public function pelayanan()
     {
-        return $this->hasMany(PemeriksaanGizi::class);
+        return $this->hasOne(Pelayanan::class, 'id', 'pelayanan_id');
     }
 }

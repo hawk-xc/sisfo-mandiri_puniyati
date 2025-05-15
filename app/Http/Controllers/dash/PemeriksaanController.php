@@ -5,6 +5,8 @@ namespace App\Http\Controllers\dash;
 use App\DataTables\PemeriksaanDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Pemeriksaan;
+use App\Models\Pelayanan;
+use App\Models\Bidan;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,13 @@ class PemeriksaanController extends Controller
      */
     public function create()
     {
-        return view('dashboard.pemeriksaan.create');
+        $dataLayanan = Pelayanan::select(['id', 'nama'])->get();
+        $dataBidan = Bidan::select(['id', 'nama'])->get();
+
+        return view('dashboard.pemeriksaan.create', [
+            'dataLayanan' => $dataLayanan,
+            'dataBidan' => $dataBidan,
+        ]);
     }
 
     /**

@@ -238,7 +238,10 @@ class PemeriksaanController extends Controller
     public function show(string $id)
     {
         $data = Pemeriksaan::findOrFail($id);
-        dd($data);
+
+        return view('dashboard.pemeriksaan.show', [
+            'data' => $data
+        ]);
     }
 
     /**

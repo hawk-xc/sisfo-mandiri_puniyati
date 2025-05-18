@@ -15,7 +15,9 @@ use App\Models\Pemeriksaan;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', WelcomeController::class)->name('landingpage');
+Route::get('/', function () {
+    return redirect()->route('login');
+})->name('landingpage');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

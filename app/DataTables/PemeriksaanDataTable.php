@@ -4,7 +4,6 @@ namespace App\DataTables;
 
 use App\Models\Pemeriksaan;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -58,10 +57,12 @@ class PemeriksaanDataTable extends DataTable
             ->addColumn('pelayanan', function($pemeriksaan) {
                 return optional($pemeriksaan->pelayanan)->nama ?? '-';
             })
-            ->editColumn('status', function($pendaftaran) {
-                $statusClass = $pendaftaran->status === 'selesai' ? 'badge-success' : 'badge-primary';
-                return '<span class="badge '.$statusClass.'">'.ucfirst($pendaftaran->status).'</span>';
+            ->editColumn('status', function($pemeriksaan) {
+                $status = $pemeriksaan->pendaftaran->status ?? 'unknown';
+                $statusClass = $status === 'selesai' ? 'badge-success' : 'badge-primary';
+                return '<span class="badge '.$statusClass.'">'.ucfirst($status).'</span>';
             })
+
             ->rawColumns(['action', 'status', 'created_at', 'updated_at'])
             ->setRowId('id');
     }

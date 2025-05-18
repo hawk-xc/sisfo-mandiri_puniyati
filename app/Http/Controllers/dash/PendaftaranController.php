@@ -37,7 +37,7 @@ class PendaftaranController extends Controller
     {
         $noRm = Pendaftaran::where('no_rm', $request->input('no_rm'))->first();
 
-        if ($noRm->exists()) {
+        if ($noRm) {
             $request->validate([
                 'tanggal' => 'required|date',
                 'status' => 'required|in:selesai,menunggu'
@@ -216,6 +216,7 @@ class PendaftaranController extends Controller
         if ($data) {
             $data = [
             [
+                '_id' => $data->id,
                 'id' => $data->no_rm,
                 'text' => $data->no_rm . ' - ' . $data->pasien->nama,
                 'pasien' => $data->pasien

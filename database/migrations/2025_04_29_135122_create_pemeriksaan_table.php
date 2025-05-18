@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->unsignedBigInteger('pendaftaran_id');
-            $table->unsignedBigInteger('pembayaran_id');
+            $table->unsignedBigInteger('pembayaran_id')->nullable(true);
             $table->unsignedBigInteger('bidan_id');
             $table->unsignedBigInteger('pelayanan_id');
             $table->string('keluhan', 200)->nullable(true);
@@ -58,7 +58,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('pendaftaran')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->nullOnDelete();;
 
             $table->foreign('bidan_id')
                 ->references('id')

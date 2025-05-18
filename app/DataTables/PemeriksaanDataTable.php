@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Pemeriksaan;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -24,16 +25,20 @@ class PemeriksaanDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function($pemeriksaan) {
                 $editUrl = route('pemeriksaan.edit', $pemeriksaan->id);
+                $showUrl = route('pemeriksaan.show', $pemeriksaan->id);
                 $deleteUrl = route('pemeriksaan.destroy', $pemeriksaan->id);
 
                 return '<div class="flex space-x-2">
-                    <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <i class="ri-edit-line"></i> Edit
+                    <a href="'.$showUrl.'" style="background-color: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <i class="ri-eye-line"></i>
+                    </a>
+                    <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-right: 0.5rem;">
+                        <i class="ri-edit-line"></i>
                     </a>
                     <form action="'.$deleteUrl.'" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus data ini?\')">
                         '.csrf_field().method_field('DELETE').'
                         <button type="submit" style="background-color: #F34B3E; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                            <i class="ri-delete-bin-line"></i> Hapus
+                            <i class="ri-delete-bin-line"></i>
                         </button>
                     </form>
                 </div>';
@@ -41,7 +46,23 @@ class PemeriksaanDataTable extends DataTable
             ->editColumn('created_at', function($pemeriksaan) {
                 return '<span class="badge badge-ghost">'.$pemeriksaan->created_at->format('d-m-Y H:i').'</span>';
             })
-            ->rawColumns(['action', 'created_at', 'updated_at'])
+            ->addColumn('no_rm', function($pemeriksaan) {
+                return $pemeriksaan->pendaftaran->no_rm;
+            })
+            ->addColumn('nama_pasien', function($pemeriksaan) {
+                return optional($pemeriksaan->pendaftaran->pasien)->nama ?? '-';
+            })
+            ->addColumn('bidan', function($pemeriksaan) {
+                return optional($pemeriksaan->bidan)->nama ?? '-';
+            })
+            ->addColumn('pelayanan', function($pemeriksaan) {
+                return optional($pemeriksaan->pelayanan)->nama ?? '-';
+            })
+            ->editColumn('status', function($pendaftaran) {
+                $statusClass = $pendaftaran->status === 'selesai' ? 'badge-success' : 'badge-primary';
+                return '<span class="badge '.$statusClass.'">'.ucfirst($pendaftaran->status).'</span>';
+            })
+            ->rawColumns(['action', 'status', 'created_at', 'updated_at'])
             ->setRowId('id');
     }
 
@@ -52,7 +73,13 @@ class PemeriksaanDataTable extends DataTable
      */
     public function query(Pemeriksaan $model): QueryBuilder
     {
-        return $model->newQuery()->with(['pendaftaran', 'bidan', 'pelayanan']);
+        return $model->newQuery()
+            ->with([
+                'pendaftaran',
+                'pendaftaran.pasien',
+                'bidan',
+                'pelayanan'
+            ]);
     }
 
     /**
@@ -99,14 +126,26 @@ class PemeriksaanDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('pendaftaran.pasien.nama')
+            Column::make('id')
+                ->title('ID')
+                ->addClass('font-medium'),
+            Column::make('no_rm')
+                ->title('No RM')
+                ->addClass('font-medium'),
+            Column::make('nama_pasien')
                 ->title('Nama Pasien')
                 ->addClass('font-medium'),
-            Column::make('bidan.nama')
+            Column::make('bidan')
                 ->title('Nama Bidan')
                 ->addClass('text-start'),
-            Column::make('pelayanan.nama')
+            Column::make('pelayanan')
                 ->title('Pelayanan')
+                ->addClass('text-start font-semibold'),
+            Column::make('keluhan')
+                ->title('Keluhan')
+                ->addClass('text-start font-semibold'),
+            Column::make('status')
+                ->title('Status')
                 ->addClass('text-start font-semibold'),
             Column::make('created_at')
                 ->title('Dibuat')

@@ -23,7 +23,6 @@ class UserSeeder extends Seeder
             'email' => 'admin1@gmail.com',
             'password' => bcrypt('password'),
             'raw_password' => PasswordService::encrypt('password'),
-            'role_id' => 1,
         ]);
     }
 }

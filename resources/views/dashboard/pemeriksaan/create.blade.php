@@ -9,10 +9,8 @@
                     </a>
                 </div>
                 <div id="form-body">
-                    <form action="{{ route('pemeriksaan.store') }}" method="post" class="flex flex-col gap-2 p-10"
-                        enctype="multipart/form-data">
+                    <form action="{{ route('pemeriksaan.store') }}" method="post" class="flex flex-col gap-2 p-10">
                         @csrf
-                        @method('POST')
 
                         <div class="flex-1">
                             {{-- input data RM --}}
@@ -25,6 +23,9 @@
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
                             </fieldset>
+
+                            <input type="hidden" name="pendaftaran_id" id="pendaftaran_id"
+                                value="{{ old('pendaftaran_id') }}" />
 
                             {{-- input nama pasien --}}
                             <fieldset class="fieldset">
@@ -51,28 +52,27 @@
                                 <select name="bidan_id" class="w-full select">
                                     <option value="">Pilih bidan yang bertugas</option>
                                     @foreach ($dataBidan as $bidan)
-                                        <option value="normal" {{ old('bidan_id') == 'bidan_id' ? 'selected' : '' }}>
+                                        <option value="{{ $bidan->id }}"
+                                            {{ old('bidan_id') == $bidan->id ? 'selected' : '' }}>
                                             {{ $bidan->nama }}</option>
-                                        </option>
                                     @endforeach
                                 </select>
-                                @error('persalinan_terakhir')
+                                @error('bidan_id')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
                             </fieldset>
 
                             <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Data Pelayanan</legend>
-                                <select name="pelayanan_id" class="w-full select">
+                                <select name="pelayanan_id" id="pelayanan_id" class="w-full select">
                                     <option value="">Pilih Pelayanan</option>
                                     @foreach ($dataLayanan as $layanan)
-                                        <option value="normal"
-                                            {{ old('pelayanan_id') == 'pelayanan_id' ? 'selected' : '' }}>
+                                        <option value="{{ $layanan->id }}"
+                                            {{ old('pelayanan_id') == $layanan->id ? 'selected' : '' }}>
                                             {{ $layanan->nama }}</option>
-                                        </option>
                                     @endforeach
                                 </select>
-                                @error('persalinan_terakhir')
+                                @error('pelayanan_id')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
                             </fieldset>
@@ -102,7 +102,6 @@
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
                             </fieldset>
-
 
                             <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Tensi</legend>
@@ -177,7 +176,7 @@
                             </fieldset>
 
                             {{-- Ibu Hamil, ANC --}}
-                            <div class="relative p-4 mt-8 border border-gray-300 rounded-md">
+                            <div id="anc-kia-form" class="relative hidden p-4 mt-8 border border-gray-300 rounded-md">
                                 <span class="absolute px-2 text-lg font-medium text-gray-700 bg-white -top-3 left-4">
                                     Form Ibu Hamil, ANC, KIA
                                 </span>
@@ -287,8 +286,9 @@
                                 </fieldset>
                             </div>
 
-                            {{-- Ibu nifas/KB --}}
-                            <div class="relative p-4 mt-8 border border-gray-300 rounded-md">
+                            {{-- Ibu nifas/KB/KIA --}}
+                            <div id="nifas-kb-form"
+                                class="relative hidden p-4 mt-8 border border-gray-300 rounded-md">
                                 <span class="absolute px-2 text-lg font-medium text-gray-700 bg-white -top-3 left-4">
                                     Form Ibu nifas/KB, KIA
                                 </span>
@@ -355,7 +355,8 @@
                             </div>
 
                             {{-- Penatalaksanaan --}}
-                            <div class="relative p-4 mt-8 border border-gray-300 rounded-md">
+                            <div id="penatalaksanaan-form"
+                                class="relative p-4 mt-8 border border-gray-300 rounded-md">
                                 <span class="absolute px-2 text-lg font-medium text-gray-700 bg-white -top-3 left-4">
                                     Form Penatalaksanaan
                                 </span>
@@ -401,10 +402,8 @@
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <style>
-            /* Style khusus untuk select2 no_rm */
             #no_rm+.select2 .select2-selection--single {
                 height: 2.7rem !important;
-                /* Sesuaikan dengan tinggi input lainnya */
                 padding: 0.75rem !important;
                 border-radius: 0.5rem !important;
                 border: 1px solid #d1d5db !important;
@@ -421,7 +420,6 @@
                 padding-top: 0.5rem !important;
             }
 
-            /* Style untuk input lainnya agar konsisten */
             .input,
             .select {
                 height: 2.5rem;
@@ -435,7 +433,6 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script>
             $(document).ready(function() {
-                // Inisialisasi Select2
                 $('#no_rm').select2({
                     placeholder: 'Cari No RM atau Nama Pasien',
                     minimumInputLength: 3,
@@ -457,22 +454,39 @@
                     }
                 });
 
-                // Ketika no_rm dipilih
                 $('#no_rm').on('select2:select', function(e) {
                     var data = e.params.data;
 
                     if (data.pasien) {
-                        // Auto-fill data pasien
+                        $('#pendaftaran_id').val(data._id);
                         $('#nama').val(data.pasien.nama).prop('disabled', true);
                         $('#alamat').val(data.pasien.alamat).prop('disabled', true);
                     }
                 });
 
-                // Ketika no_rm dihapus pilihannya
                 $('#no_rm').on('select2:clear', function() {
-                    // Enable semua input dan kosongkan
                     $('input[id!="no_rm"]').val('').prop('disabled', false);
                 });
+
+                function toggleFormsBasedOnService() {
+                    const selectedService = $('#pelayanan_id option:selected').text().trim().toUpperCase();
+                    console.log(selectedService);
+                    const ancKiaForm = $('#anc-kia-form');
+                    const nifasKbForm = $('#nifas-kb-form');
+
+                    ancKiaForm.addClass('hidden');
+                    nifasKbForm.addClass('hidden');
+
+                    if (selectedService === 'ANC' || selectedService === 'KIA') {
+                        ancKiaForm.removeClass('hidden');
+                    } else if (selectedService === 'IBU NIFAS' || selectedService === 'KB') {
+                        nifasKbForm.removeClass('hidden');
+                    }
+                }
+
+                $('#pelayanan_id').on('change', toggleFormsBasedOnService);
+
+                toggleFormsBasedOnService();
             });
         </script>
     @endpush

@@ -92,10 +92,10 @@
                                 <path d="m21 21-4.3-4.3" />
                             </svg>
                         </div>
-                        <input type="text"
+                        {{-- <input type="text"
                             class="block w-full py-2 text-sm bg-white border-gray-200 rounded-lg ps-10 pe-16 focus:outline-hidden focus:border-blue-500 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                            placeholder="Cari Data KIB">
-                        <div class="absolute inset-y-0 z-20 flex items-center pointer-events-none end-0 pe-1">
+                            placeholder="Cari Data KIB"> --}}
+                        {{-- <div class="absolute inset-y-0 z-20 flex items-center pointer-events-none end-0 pe-1">
                             <button type="button"
                                 class="inline-flex items-center justify-center text-gray-500 rounded-full shrink-0 size-6 hover:text-blue-600 focus:outline-hidden focus:text-blue-600"
                                 aria-label="Close">
@@ -108,8 +108,8 @@
                                     <path d="m9 9 6 6" />
                                 </svg>
                             </button>
-                        </div>
-                        <div
+                        </div> --}}
+                        {{-- <div
                             class="absolute inset-y-0 z-20 flex items-center text-gray-400 pointer-events-none end-0 pe-3">
                             <svg class="text-gray-400 shrink-0 size-3 dark:text-white/60"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -119,15 +119,15 @@
                             </svg>
                             <span class="mx-1">
                                 <svg class="text-gray-400 shrink-0 size-3 dark:text-white/60"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <path d="M5 12h14" />
                                     <path d="M12 5v14" />
                                 </svg>
                             </span>
                             <span class="text-xs">/</span>
-                        </div>
+                        </div> --}}
                     </div>
                     <!-- End Search Input -->
                 </div>
@@ -135,9 +135,9 @@
                 <div class="flex flex-row items-center justify-end gap-1">
                     <button type="button"
                         class="md:hidden size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-slate-900 focus:outline-hidden focus:bg-slate-900 disabled:opacity-50 disabled:pointer-events-none">
-                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8" />
                             <path d="m21 21-4.3-4.3" />
                         </svg>
@@ -146,9 +146,9 @@
 
                     <button type="button"
                         class="size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">
-                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                         </svg>
@@ -157,9 +157,9 @@
 
                     <button type="button"
                         class="size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">
-                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                         </svg>
                         <span class="sr-only">Activity</span>

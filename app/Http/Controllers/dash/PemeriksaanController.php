@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\dash;
 
 use App\DataTables\PemeriksaanDataTable;
+use App\DataTables\PemeriksaanObatDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Pemeriksaan;
-use App\Models\Pelayanan;
 use App\Models\Bidan;
+use App\Models\Obat;
+use App\Models\Pelayanan;
+use App\Models\Pemeriksaan;
+use App\Models\PemeriksaanObat;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PemeriksaanController extends Controller
 {
@@ -235,11 +239,12 @@ class PemeriksaanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(PemeriksaanObatDataTable $dataTable, string $id)
     {
         $data = Pemeriksaan::findOrFail($id);
 
-        return view('dashboard.pemeriksaan.show', [
+        return $dataTable->render('dashboard.pemeriksaan.show', [
+            'title' => 'Data Obat Pemeriksaan',
             'data' => $data
         ]);
     }
@@ -280,6 +285,108 @@ class PemeriksaanController extends Controller
             return redirect()->route('pemeriksaan.index')->with('success', 'Data Pemeriksaan Berhasil Dihapus');
         } catch (Exception $e) {
             return redirect()->route('pemeriksaan.index')->with('error', 'Data Pemeriksaan Gagal Dihapus');
+        }
+    }
+
+    public function storePemeriksaanObat(Request $request) {
+        $request->validate([
+            'pemeriksaan_id' => 'numeric|required',
+            'obat_id' => 'numeric|required',
+            'dosis' => 'required|string',
+            'keterangan' => 'nullable|string'
+        ], [
+            'pemeriksaan_id.numeric' => 'Pemeriksaan wajib dipilih.',
+            'pemeriksaan_id.required' => 'Pemeriksaan wajib dipilih.',
+            'obat_id.numeric' => 'Obat wajib dipilih.',
+            'obat_id.required' => 'Obat wajib dipilih.',
+            'dosis.required' => 'Dosis wajib diisi.',
+            'dosis.string' => 'Dosis harus berupa teks.',
+            'keterangan.string' => 'Keterangan harus berupa teks.',
+        ]);
+
+        try {
+            $data = new PemeriksaanObat;
+            $data->pemeriksaan_id = $request->pemeriksaan_id;
+            $data->obat_id = $request->obat_id;
+            $data->dosis = $request->dosis;
+            $data->keterangan = $request->keterangan;
+
+            $obatStock = Obat::find($request->obat_id);
+            $obatStock->stok = $obatStock->stok - 1;
+            $obatStock->save();
+
+            $data->save();
+
+            return response()->json([
+            'success' => true,
+            'message' => 'Resep obat berhasil ditambahkan',
+            'data' => $data
+        ], 201);
+        }
+        catch (Exception $e) {
+            return response()->json([
+            'success' => false,
+            'message' => 'Validasi gagal',
+            'errors' => $e
+        ], 422);
+        }
+    }
+
+    public function editPemeriksaanObat(string $id)
+    {
+        $resep = PemeriksaanObat::with('obat')->findOrFail($id);
+
+        return response()->json([
+            'id' => $resep->id,
+            'dosis' => $resep->dosis,
+            'keterangan' => $resep->keterangan,
+            'obat' => $resep->obat ? [
+                'id' => $resep->obat->id,
+                'nama' => $resep->obat->nama
+            ] : null
+        ]);
+    }
+
+    public function updatePemeriksaanObat(Request $request, string $id)
+    {
+        try {
+            $validated = $request->validate([
+                'obat_id' => 'required|exists:obats,id',
+                'dosis' => 'required|string|max:255',
+                'keterangan' => 'nullable|string'
+            ]);
+
+            $resep = PemeriksaanObat::findOrFail($id);
+            $resep->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Resep obat berhasil diupdate'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupdate resep obat: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deletePemeriksaanObat(string $id)
+    {
+        try {
+            $data = PemeriksaanObat::findOrFail($id);
+            $data->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Resep obat berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus resep obat: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

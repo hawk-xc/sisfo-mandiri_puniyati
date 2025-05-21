@@ -228,4 +228,19 @@ class PendaftaranController extends Controller
 
         return response()->json(['results' => $data]);
     }
+
+    public function changeStatus(String $id)
+    {
+        $data = Pendaftaran::findOrFail($id);
+
+        try {
+            $data->status = 'selesai';
+
+            $data->save();
+
+            return redirect()->back();
+        } catch (Exception $e) {
+            return redirect()->back();
+        }
+    }
 }

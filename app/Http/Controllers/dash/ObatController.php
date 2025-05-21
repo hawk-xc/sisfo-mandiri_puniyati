@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Obat;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ObatController extends Controller
 {
@@ -141,5 +142,24 @@ class ObatController extends Controller
         } catch (Exception $e) {
             return redirect()->route('obat.index')->with('error', 'Gagal menghapus data Obat!');
         }
+    }
+
+    /**
+     * Handle Select2
+     */
+    public function select2(Request $request)
+    {
+        $search = $request->search;
+
+        $obats = Obat::when($search, function($query) use ($search) {
+                $query->where('nama', 'like', '%'.$search.'%');
+            })
+            ->select('id', 'nama as text', 'stok')
+            ->paginate(10);
+
+        return response()->json([
+            'data' => $obats->items(),
+            'next_page_url' => $obats->nextPageUrl()
+        ]);
     }
 }

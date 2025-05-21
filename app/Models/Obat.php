@@ -24,4 +24,9 @@ class Obat extends Model
         'harga_beli',
         'harga_jual'
     ];
+
+    public function pemeriksaanObat()
+    {
+        return $this->hasMany(PemeriksaanObat::class, 'obat_id');
+    }
 }

@@ -70,4 +70,9 @@ class Pemeriksaan extends Model
     {
         return $this->hasOne(Pelayanan::class, 'id', 'pelayanan_id');
     }
+
+    public function pemeriksaanObat()
+    {
+        return $this->hasMany(PemeriksaanObat::class, 'pemeriksaan_id', 'id');
+    }
 }

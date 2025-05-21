@@ -3,76 +3,72 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pemeriksaan;
+use App\Models\Bidan;
 use App\Models\Lansia;
+use App\Models\Pemeriksaan;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
     // Daftar heading untuk masing-masing jenis data
     protected $exportHeadings = [
+        'bidan' => [
+            'Nama',
+            'No Telp',
+            'Jadwal Praktek'
+        ],
+        'obat' => [
+            'Nama',
+            'Jenis',
+            'Stok'
+        ],
+        'pasien' => [
+            'Nama',
+            'Alamat',
+            'Penanggung Jawab',
+            'No Telp'
+        ],
+        'pelayanan' => [
+            'Nama',
+            'Biaya'
+        ],
+        'pendaftaran' => [
+            'No RM',
+            'Nama Pasien',
+            'Alamat',
+            'Status'
+        ],
         'pemeriksaan' => [
-            'No',
-            'Nama',
-            'Tgl Lahir',
-            'NIK',
-            'BB (Kg)',
-            'TB (Cm)',
-            'IMT (kg/m²)',
-            'Tensi',
-            'Lingkar Perut (Cm)',
-            'Gula Darah (mg/dL)',
-            'Kesehatan',
-            'Rujukan'
-        ],
-        'lansia' => [
-            'No',
-            'Nama',
-            'NIK',
-            'Tanggal Lahir',
-            'Umur',
-            'Jenis Kelamin',
-            'Status Perkawinan',
-            'Alamat',
-            'Agama',
-            'Pendidikan',
-            'Gol Darah',
-            'Riwayat',
-        ],
-        'pj' => [
-            'Nama',
-            'NIK',
-            'Email',
-            'Tanggal Lahir',
-            'Jenis Kelamin',
-            'Alamat',
-            'No Telp'
-        ],
-        'kader' => [
-            'Nama',
-            'NIK',
-            'Email',
-            'Tanggal Lahir',
-            'Jenis Kelamin',
-            'Alamat',
-            'No Telp'
+            'No RM',
+            'Nama Pasien',
+            'Nama Bidan',
+            'Pelayanan',
+            'Keluhan',
+            'Status'
         ]
     ];
 
     // Daftar view untuk PDF export
     protected $exportViews = [
-        'pemeriksaan' => 'Admin.Laporan.exports.pemeriksaan_pdf',
-        'lansia' => 'Admin.Laporan.exports.lansia_pdf',
-        'pj' => 'Admin.Laporan.exports.pj_pdf',
-        'kader' => 'Admin.Laporan.exports.kader_pdf'
+        'bidan' => 'dashboard.export.bidan_pdf',
+        'obat' => 'dashboard.export.obat_pdf',
+        'pasien' => 'dashboard.export.pasien_pdf',
+        'pelayanan' => 'dashboard.export.pelayanan_pdf',
+        'pendaftaran' => 'dashboard.export.pendaftaran_pdf',
+        'pemeriksaan' => 'dashboard.export.pemeriksaan_pdf'
     ];
 
     // Daftar nama file untuk export
     protected $exportFileNames = [
+        'bidan' => 'data-bidan',
+        'obat' => 'data-obat',
+        'pasien' => 'data-pasien',
+        'pelayanan' => 'data-pelayanan',
+        'pendaftaran' => 'data-pendaftaran',
         'pemeriksaan' => 'data-pemeriksaan-lansia',
         'lansia' => 'data-lansia',
         'pj' => 'data-penanggung-jawab',
@@ -85,54 +81,6 @@ class LaporanController extends Controller
     public function index()
     {
         return view('Admin.Laporan.index');
-    }
-
-    public function lansia_data(Request $request)
-    {
-        $lansias = $this->getLansiaData($request);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('Admin.Laporan.data.partials.lansia_table', compact('lansias'))->render()
-            ]);
-        }
-
-        return view('Admin.Laporan.data.lansia', compact('lansias'));
-    }
-
-    public function pemeriksaan_data(Request $request)
-    {
-        $pemeriksaan = $this->getPemeriksaanData($request);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('Admin.Laporan.data.partials.pemeriksaan_table', compact('pemeriksaan'))->render()
-            ]);
-        }
-
-        return view('Admin.Laporan.data.pemeriksaan', compact('pemeriksaan'));
-    }
-
-    public function pj_data(Request $request)
-    {
-        $pjs = $this->getPjData($request);
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('Admin.Laporan.data.partials.pj_table', compact('pjs'))->render()
-            ]);
-        }
-        return view('Admin.Laporan.data.pj', compact('pjs'));
-    }
-
-    public function kader_data(Request $request)
-    {
-        $kader = $this->getKaderData($request);
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('Admin.Laporan.data.partials.kader_table', compact('kader'))->render()
-            ]);
-        }
-        return view('Admin.Laporan.data.kader', compact('kader'));
     }
 
     // Method untuk export data
@@ -163,15 +111,19 @@ class LaporanController extends Controller
     {
         switch ($dataType) {
             case 'pemeriksaan':
-                return $this->getPemeriksaanData($request);
-            case 'lansia':
-                return $this->getLansiaData($request);
-            case 'pj':
-                return $this->getPjData($request);
-            case 'kader':
-                return $this->getKaderData($request);
+            return $this->getPemeriksaanData($request);
+            case 'bidan':
+            return $this->getBidanData($request);
+            case 'obat':
+            return $this->getObatData($request);
+            case 'pasien':
+            return $this->getPasienData($request);
+            case 'pelayanan':
+            return $this->getPelayananData($request);
+            case 'pendaftaran':
+            return $this->getPendaftaranData($request);
             default:
-                return collect();
+            return collect();
         }
     }
 
@@ -217,6 +169,21 @@ class LaporanController extends Controller
         }
 
         return $query->get(['pemeriksaan.*']); // Pastikan hanya kolom pemeriksaan yang diambil
+    }
+
+    protected function getBidanData(Request $request)
+    {
+        $query = Bidan::query();
+
+        $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('nama', $sortDirection);
+
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
+
+        return $query->get(['bidan.*']);
     }
 
     protected function getLansiaData(Request $request)
@@ -330,33 +297,13 @@ class LaporanController extends Controller
                         'Rujukan' => $item->hospital_referral ? 'Ya' : 'Tidak'
                     ];
                 });
-            case 'lansia':
+            case 'bidan':
                 return $data->map(function ($item, $index) {
                     return [
                         'No' => $index + 1,
-                        'Nama' => $item->nama ?? '-',
-                        'NIK' => $item->nik ?? '-',
-                        'Tanggal Lahir' => $item->tanggal_lahir ? \Carbon\Carbon::parse($item->tanggal_lahir)->format('d/m/Y') : '-',
-                        'Umur' => $item->tanggal_lahir ? \Carbon\Carbon::parse($item->tanggal_lahir)->age . ' Tahun' : '-',
-                        'Jenis Kelamin' => $item->jenis_kelamin ?? '-',
-                        'Status Perkawinan' => $item->status_perkawinan ?? '-',
-                        'Alamat' => $item->alamat ?? '-',
-                        'Agama' => $item->agama ?? '-',
-                        'Pendidikan' => $item->pendidikan_terakhir ?? '-',
-                        'Gol Darah' => $item->golongan_darah ?? '-',
-                        'Riwayat' => $item->riwayat_kesehatan ?? '-'
-                    ];
-                });
-            case 'pj':
-                return $data->map(function ($item, $index) {
-                    return [
-                        'No' => $index + 1,
-                        'Nama' => $item->name,
-                        'NIK' => $item->nik ?? '-',
-                        'Email' => $item->email,
-                        'Jenis Kelamin' => $item->gender ?? '-',
-                        'Alamat' => $item->address,
-                        'No Telp' => $item->phone,
+                        'Nama' => $item->nama,
+                        'No Telp' => $item->no_telp,
+                        'Jadwal Praktek' => $item->jadwal_praktek,
                     ];
                 });
             case 'kader':

@@ -57,19 +57,13 @@ class PelayananController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $data = Pelayanan::findOrFail($id);
+
+        return view('dashboard.masterdata.pelayanan.edit', ['data' => $data]);
     }
 
     /**
@@ -77,7 +71,25 @@ class PelayananController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Pelayanan::findOrFail($id);
+
+        $request->validate([
+            'biaya' => 'required|numeric'
+        ], [
+            'biaya.required' => 'Biaya wajib diisi.',
+            'biaya.numeric' => 'Biaya harus berupa angka.'
+        ]);
+
+        try {
+            $data->biaya = $request->biaya;
+            $data->save();
+
+            return redirect()->route('pelayanan.index')->with('success', 'Data Pelayanan berhasil diubah.');
+        }
+        catch (Exception $e) {
+            dd($e);
+            return redirect()->route('pelayanan.index')->with('error', 'Data Pelayanan gagal diubah. -> ' . $e);
+        }
     }
 
     /**

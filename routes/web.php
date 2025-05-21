@@ -61,8 +61,22 @@ Route::group([
     Route::get('/datatable/bidan', [BidanController::class, 'datatableAll'])->name('datatable.bidan');
     Route::get('/datatable/pasien', [PasienController::class, 'datatableAll'])->name('datatable.pasien');
 
+    // pemeriksaanObat route group
+    Route::post('pemeriksaanobat', [PemeriksaanController::class, 'storePemeriksaanObat'])
+        ->name('pemeriksaanobat.store');
+    Route::get('pemeriksaanobat/{id}/edit', [PemeriksaanController::class, 'editPemeriksaanObat'])
+        ->name('pemeriksaanobat.edit');
+    Route::put('pemeriksaanobat/{id}', [PemeriksaanController::class, 'updatePemeriksaanObat'])
+        ->name('pemeriksaanobat.update');
+    Route::delete('pemeriksaanobat/{id}', [PemeriksaanController::class, 'deletePemeriksaanObat'])
+        ->name('pemeriksaanobat.delete');
+
+    // change status
+    Route::get('pendaftaranstatus/{id}', [PendaftaranController::class, 'changeStatus'])->name('pendaftaranstatus.update');
+
     Route::group(['prefix' => 'select2'], function () {
         Route::get('pendaftaran', [Pendaftarancontroller::class, 'selectRm'])->name('dashboard.select2.pendaftaran');
+        Route::get('obat', [ObatController::class, 'select2'])->name('dashboard.select2.obat');
     });
 });
 

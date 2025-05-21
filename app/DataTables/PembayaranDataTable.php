@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Pemeriksaan;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -23,6 +24,7 @@ class PembayaranDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function($pemeriksaan) {
+                $editUrl = route('pemeriksaan.edit', $pemeriksaan->id);
                 $showUrl = route('pemeriksaan.show', $pemeriksaan->id);
                 $deleteUrl = route('pemeriksaanobat.delete', $pemeriksaan->id);
 
@@ -30,12 +32,9 @@ class PembayaranDataTable extends DataTable
                     <a href="'.$showUrl.'" style="background-color: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
                         <i class="ri-eye-line"></i>
                     </a>
-                    <form action="'.$deleteUrl.'" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus data ini?\')">
-                        '.csrf_field().method_field('DELETE').'
-                        <button type="submit" style="background-color: #F34B3E; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                            <i class="ri-delete-bin-line"></i>
-                        </button>
-                    </form>
+                    <a href="" target="_blank" style="background-color: #F59E42; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <i class="ri-file-pdf-line"></i>
+                    </a>
                 </div>';
             })
             ->editColumn('created_at', function($pemeriksaan) {
@@ -46,6 +45,24 @@ class PembayaranDataTable extends DataTable
             })
             ->addColumn('nama_pasien', function($pemeriksaan) {
                 return optional($pemeriksaan->pendaftaran->pasien)->nama ?? '-';
+            })
+            ->addColumn('bidan', function($pemeriksaan) {
+                return optional($pemeriksaan->bidan)->nama ?? '-';
+            })
+            ->addColumn('pelayanan', function($pemeriksaan) {
+                return optional($pemeriksaan->pelayanan)->nama ?? '-';
+            })
+            ->addColumn('obat', function($pemeriksaan) {
+                return $pemeriksaan->pemeriksaanObat->count() . " Obat" ?? '-';
+            })
+             ->addColumn('total_harga', function($pemeriksaan) {
+                $totalHargaObat = $pemeriksaan->pemeriksaanObat->sum(function($item) {
+                    return $item->obat ? $item->obat->harga_beli : 0;
+                });
+
+                $biayaPelayanan = $pemeriksaan->pelayanan->biaya;
+
+                return 'Rp ' . number_format($totalHargaObat + $biayaPelayanan, 0, ',', '.');
             })
             ->editColumn('status', function($pemeriksaan) {
                 $status = $pemeriksaan->pendaftaran->status ?? 'unknown';
@@ -64,12 +81,13 @@ class PembayaranDataTable extends DataTable
      */
     public function query(Pemeriksaan $model): QueryBuilder
     {
-        return $model->newQuery()->with([
-            'pendaftaran',
-            'pendaftaran.pasien',
-            'bidan',
-            'obat'
-        ]);
+        return $model->newQuery()
+            ->with([
+                'pendaftaran',
+                'pendaftaran.pasien',
+                'bidan',
+                'pelayanan'
+            ]);
     }
 
     /**
@@ -119,6 +137,32 @@ class PembayaranDataTable extends DataTable
             Column::make('id')
                 ->title('Pemeriksaan ID')
                 ->addClass('font-medium'),
+            Column::make('no_rm')
+                ->title('No RM')
+                ->addClass('font-medium'),
+            Column::make('nama_pasien')
+                ->title('Nama Pasien')
+                ->addClass('font-medium'),
+            Column::make('bidan')
+                ->title('Nama Bidan')
+                ->addClass('text-start'),
+            Column::make('pelayanan')
+                ->title('Pelayanan')
+                ->addClass('text-start font-semibold'),
+            Column::make('obat')
+                ->title('Jumlah Obat')
+                ->addClass('text-start font-semibold'),
+            Column::make('status')
+                ->title('Status')
+                ->addClass('text-start font-semibold'),
+            Column::make('total_harga')
+                ->title('Total Harga')
+                ->addClass('text-start font-semibold'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->width(180)
+                ->addClass('text-start font-semibold'),
         ];
     }
 
@@ -127,6 +171,6 @@ class PembayaranDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Pemeriksaan_' . date('YmdHis');
+        return 'Pembayaran_' . date('YmdHis');
     }
 }

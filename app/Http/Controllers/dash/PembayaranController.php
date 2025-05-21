@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\dash;
 
+use App\DataTables\PembayaranDataTable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,11 @@ class PembayaranController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PembayaranDataTable $dataTable)
     {
-        return view('dashboard.pembayaran.index');
+        return $dataTable->render('dashboard.pembayaran.index', [
+            'title' => 'Data Pemeriksaan'
+        ]);
     }
 
     /**

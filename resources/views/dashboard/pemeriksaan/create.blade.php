@@ -477,9 +477,12 @@
                     ancKiaForm.addClass('hidden');
                     nifasKbForm.addClass('hidden');
 
-                    if (selectedService === 'ANC' || selectedService === 'KIA') {
+                    if (selectedService === 'ANC') {
                         ancKiaForm.removeClass('hidden');
                     } else if (selectedService === 'IBU NIFAS' || selectedService === 'KB') {
+                        nifasKbForm.removeClass('hidden');
+                    } else if (selectedService === 'KIA') {
+                        ancKiaForm.removeClass('hidden');
                         nifasKbForm.removeClass('hidden');
                     }
                 }

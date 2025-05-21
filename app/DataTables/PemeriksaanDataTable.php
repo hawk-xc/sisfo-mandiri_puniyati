@@ -25,7 +25,7 @@ class PemeriksaanDataTable extends DataTable
             ->addColumn('action', function($pemeriksaan) {
                 $editUrl = route('pemeriksaan.edit', $pemeriksaan->id);
                 $showUrl = route('pemeriksaan.show', $pemeriksaan->id);
-                $deleteUrl = route('pemeriksaan.destroy', $pemeriksaan->id);
+                $deleteUrl = route('pemeriksaanobat.delete', $pemeriksaan->id);
 
                 return '<div class="flex space-x-2">
                     <a href="'.$showUrl.'" style="background-color: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">

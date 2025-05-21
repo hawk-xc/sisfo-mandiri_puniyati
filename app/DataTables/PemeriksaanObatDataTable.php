@@ -21,21 +21,15 @@ class PemeriksaanObatDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        // <button onclick="window.openEditModal('.$pemeriksaanObat->id.')" class="btn btn-warning btn-sm">
+        //     <i class="ri-edit-line"></i>
+        // </button>
         return (new EloquentDataTable($query))
             ->addColumn('action', function($pemeriksaanObat) {
-                $editUrl = route('pemeriksaan.edit', $pemeriksaanObat->id);
-                $deleteUrl = route('pemeriksaan.destroy', $pemeriksaanObat->id);
-
                 return '<div class="flex space-x-2">
-                    <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <i class="ri-edit-line"></i>
-                    </a>
-                    <form action="'.$deleteUrl.'" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus data ini?\')">
-                        '.csrf_field().method_field('DELETE').'
-                        <button type="submit" style="background-color: #F34B3E; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                            <i class="ri-delete-bin-line"></i>
-                        </button>
-                    </form>
+                    <button onclick="window.deleteResepObat('.$pemeriksaanObat->id.')" class="btn btn-error btn-sm">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
                 </div>';
             })
             ->addColumn('obat', function($pemeriksaanObat) {
@@ -109,7 +103,7 @@ class PemeriksaanObatDataTable extends DataTable
     {
         return [
             Column::make('id')
-                ->title('No'),
+                ->title('Id'),
             Column::make('obat')
                 ->title('Nama Obat'),
             Column::make('dosis')

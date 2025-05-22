@@ -119,7 +119,9 @@
                 <th class="no-column">No</th>
                 <th>Nama</th>
                 <th>Jenis</th>
-                <th>Stok</th>
+                <th>Jumlah Stok</th>
+                <th>Harga Beli</th>
+                <th>Harga Jual</th>
                 <th>Ditambahkan</th>
             </tr>
         </thead>
@@ -132,6 +134,8 @@
                     <td>{{ $item['Nama'] ?? '-' }}</td>
                     <td>{{ $item['Jenis'] ?? '-' }}</td>
                     <td>{{ $item['Stok'] ?? '-' }}</td>
+                    <td>{{ $item['Harga Beli'] ?? '-' }}</td>
+                    <td>{{ $item['Harga Jual'] ?? '-' }}</td>
                     <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
                 </tr>
             @empty

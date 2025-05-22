@@ -133,6 +133,7 @@
                     <td>{{ $item['Nama'] ?? '-' }}</td>
                     <td>{{ $item['Alamat'] ?? '-' }}</td>
                     <td>{{ $item['Penanggung Jawab'] ?? '-' }}</td>
+                    <td>{{ $item['No Telp'] ?? '-' }}</td>
                     <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
                 </tr>
             @empty

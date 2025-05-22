@@ -123,6 +123,7 @@
                 <th>Pelayanan</th>
                 <th>Keluhan</th>
                 <th>Status</th>
+                <th>Obat Diberikan</th>
                 <th>Ditambahkan</th>
             </tr>
         </thead>
@@ -138,6 +139,7 @@
                     <td>{{ $item['Pelayanan'] ?? '-' }}</td>
                     <td>{{ $item['Keluhan'] ?? '-' }}</td>
                     <td>{{ $item['Status'] ?? '-' }}</td>
+                    <td>{{ $item['Obat Diberikan'] ?? '-' }}</td>
                     <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
                 </tr>
             @empty

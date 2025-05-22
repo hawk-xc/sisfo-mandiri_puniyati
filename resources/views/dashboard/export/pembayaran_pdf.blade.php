@@ -104,7 +104,7 @@
 
 <body>
     <div class="header">
-        <h2 class="font-bold">DATA PENDAFTARAN</h2>
+        <h2 class="font-bold">DATA PEMBAYARAN</h2>
         <p class="font-bold">KLINIK NGUDI WALUYO</p>
 
         @if ($dateRange)
@@ -117,11 +117,15 @@
         <thead>
             <tr>
                 <th class="no-column">No</th>
+                <th>Id Pemeriksaan</th>
                 <th>No RM</th>
                 <th>Nama Pasien</th>
-                <th>Alamat</th>
+                <th>Nama Bidan</th>
+                <th>Nama Pelayanan</th>
+                <th>Jumlah Obat</th>
                 <th>Status</th>
-                <th>Tanggal Pendaftaran</th>
+                <th>Total Biaya</th>
+                {{-- <th>Tanggal Pendaftaran</th> --}}
                 <th>Ditambahkan</th>
             </tr>
         </thead>
@@ -131,11 +135,15 @@
                 @php $counter++; @endphp
                 <tr>
                     <td class="no-column">{{ $counter }}</td>
+                    <td>{{ $item['No Pemeriksaan'] ?? '-' }}</td>
                     <td>{{ $item['No RM'] ?? '-' }}</td>
                     <td>{{ $item['Nama Pasien'] ?? '-' }}</td>
-                    <td>{{ $item['Alamat'] ?? '-' }}</td>
+                    <td>{{ $item['Nama Bidan'] ?? '-' }}</td>
+                    <td>{{ strtoupper($item['Pelayanan'] ?? '-') }}</td>
+                    <td>{{ $item['Jumlah Obat'] ?? '-' }}</td>
                     <td>{{ $item['Status'] ?? '-' }}</td>
-                    <td>{{ $item['Tanggal Pendaftaran'] ?? '-' }}</td>
+                    <td>{{ $item['Total Harga'] ?? '-' }}</td>
+                    {{-- <td>{{ $item['Tanggal Pendaftaran'] ?? '-' }}</td> --}}
                     <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
                 </tr>
             @empty

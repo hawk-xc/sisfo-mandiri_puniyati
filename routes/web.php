@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\dash\LaporanController;
 use App\Http\Controllers\dash\PemeriksaanController;
 use App\Http\Controllers\dash\BidanController;
 use App\Http\Controllers\dash\ObatController;
@@ -77,6 +77,11 @@ Route::group([
     Route::group(['prefix' => 'select2'], function () {
         Route::get('pendaftaran', [Pendaftarancontroller::class, 'selectRm'])->name('dashboard.select2.pendaftaran');
         Route::get('obat', [ObatController::class, 'select2'])->name('dashboard.select2.obat');
+    });
+
+    Route::group(['prefix' => 'export'], function () {
+        Route::get('/export/{type}', [LaporanController::class, 'export'])
+            ->name('laporan.export');
     });
 });
 

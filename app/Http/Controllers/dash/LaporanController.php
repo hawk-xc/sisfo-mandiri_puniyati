@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\dash;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bidan;
 use App\Models\Lansia;
+use App\Models\Pasien;
+use App\Models\Pelayanan;
 use App\Models\Pemeriksaan;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -171,6 +173,21 @@ class LaporanController extends Controller
         return $query->get(['pemeriksaan.*']); // Pastikan hanya kolom pemeriksaan yang diambil
     }
 
+    protected function getPasienData(Request $request)
+    {
+        $query = Pasien::query();
+
+        $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('nama', $sortDirection);
+
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
+
+        return $query->get(['pasien.*']);
+    }
+
     protected function getBidanData(Request $request)
     {
         $query = Bidan::query();
@@ -186,44 +203,49 @@ class LaporanController extends Controller
         return $query->get(['bidan.*']);
     }
 
-    protected function getLansiaData(Request $request)
+    protected function getObatData(Request $request)
     {
-        $query = Lansia::query();
+        $query = Bidan::query();
 
         $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
         $query->orderBy('nama', $sortDirection);
 
-        $results = $query->get();
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
 
-        return $results;
+        return $query->get(['bidan.*']);
     }
 
-    protected function getPjData(Request $request)
+    protected function getPendaftaranData(Request $request)
     {
-        $query = User::query();
-
-        $query->where('role_id', 3);
+        $query = Bidan::query();
 
         $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
-        $query->orderBy('name', $sortDirection);
+        $query->orderBy('nama', $sortDirection);
 
-        $results = $query->get();
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
 
-        return $results;
+        return $query->get(['bidan.*']);
     }
 
-    protected function getKaderData(Request $request)
+    protected function getPelayananData(Request $request)
     {
-        $query = User::query();
-
-        $query->where('role_id', 2);
+        $query = Pelayanan::query();
 
         $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
-        $query->orderBy('name', $sortDirection);
+        $query->orderBy('nama', $sortDirection);
 
-        $results = $query->get();
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
 
-        return $results;
+        return $query->get(['pelayanan.*']);
     }
 
     // Method untuk export Excel
@@ -297,6 +319,16 @@ class LaporanController extends Controller
                         'Rujukan' => $item->hospital_referral ? 'Ya' : 'Tidak'
                     ];
                 });
+            case 'pasien':
+                return $data->map(function ($item, $index) {
+                    return [
+                        'No' => $index + 1,
+                        'Nama' => $item->nama,
+                        'Alamat' => $item->alamat,
+                        'Penanggung Jawab' => $item->penanggung_jawab,
+                        'No Telp' => $item->no_telp,
+                    ];
+                });
             case 'bidan':
                 return $data->map(function ($item, $index) {
                     return [
@@ -304,6 +336,25 @@ class LaporanController extends Controller
                         'Nama' => $item->nama,
                         'No Telp' => $item->no_telp,
                         'Jadwal Praktek' => $item->jadwal_praktek,
+                    ];
+                });
+            case 'pelayanan':
+                return $data->map(function ($item, $index) {
+                    return [
+                        'No' => $index + 1,
+                        'Nama' => $item->nama,
+                        'Biaya' => 'Rp. ' . number_format($item->biaya, 0, ',', '.'),
+                    ];
+                });
+            case 'obat':
+                return $data->map(function ($item, $index) {
+                    return [
+                        'No' => $index + 1,
+                        'Nama' => $item->nama,
+                        'Jenis' => $item->jenis,
+                        'Stok' => $item->stok,
+                        'Harga Beli' => 'Rp. ' . number_format($item->harga_beli, 0, ',', '.'),
+                        'Harga Jual' => 'Rp. ' . number_format($item->harga_jual, 0, ',', '.'),
                     ];
                 });
             case 'kader':

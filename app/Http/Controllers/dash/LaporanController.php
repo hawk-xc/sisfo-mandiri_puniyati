@@ -5,9 +5,11 @@ namespace App\Http\Controllers\dash;
 use App\Http\Controllers\Controller;
 use App\Models\Bidan;
 use App\Models\Lansia;
+use App\Models\Obat;
 use App\Models\Pasien;
 use App\Models\Pelayanan;
 use App\Models\Pemeriksaan;
+use App\Models\Pendaftaran;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -51,6 +53,16 @@ class LaporanController extends Controller
             'Pelayanan',
             'Keluhan',
             'Status'
+        ],
+        'pembayaran' => [
+            'Id Pemeriksaan',
+            'No RM',
+            'Nama Pasien',
+            'Nama Bidan',
+            'Pelayanan',
+            'Jumlah Obat',
+            'Status',
+            'Total Harga'
         ]
     ];
 
@@ -61,7 +73,8 @@ class LaporanController extends Controller
         'pasien' => 'dashboard.export.pasien_pdf',
         'pelayanan' => 'dashboard.export.pelayanan_pdf',
         'pendaftaran' => 'dashboard.export.pendaftaran_pdf',
-        'pemeriksaan' => 'dashboard.export.pemeriksaan_pdf'
+        'pemeriksaan' => 'dashboard.export.pemeriksaan_pdf',
+        'pembayaran' => 'dashboard.export.pembayaran_pdf',
     ];
 
     // Daftar nama file untuk export
@@ -72,9 +85,7 @@ class LaporanController extends Controller
         'pelayanan' => 'data-pelayanan',
         'pendaftaran' => 'data-pendaftaran',
         'pemeriksaan' => 'data-pemeriksaan-lansia',
-        'lansia' => 'data-lansia',
-        'pj' => 'data-penanggung-jawab',
-        'kader' => 'data-kader'
+        'pembayaran' => 'data-pembayaran',
     ];
 
     /**
@@ -113,19 +124,21 @@ class LaporanController extends Controller
     {
         switch ($dataType) {
             case 'pemeriksaan':
-            return $this->getPemeriksaanData($request);
+                return $this->getPemeriksaanData($request);
             case 'bidan':
-            return $this->getBidanData($request);
+                return $this->getBidanData($request);
             case 'obat':
-            return $this->getObatData($request);
+                return $this->getObatData($request);
             case 'pasien':
-            return $this->getPasienData($request);
+                return $this->getPasienData($request);
             case 'pelayanan':
-            return $this->getPelayananData($request);
+                return $this->getPelayananData($request);
             case 'pendaftaran':
-            return $this->getPendaftaranData($request);
+                return $this->getPendaftaranData($request);
+            case 'pembayaran':
+                return $this->getPembayaranData($request);
             default:
-            return collect();
+                return collect();
         }
     }
 
@@ -159,18 +172,17 @@ class LaporanController extends Controller
     // Method untuk mendapatkan data pemeriksaan
     protected function getPemeriksaanData(Request $request)
     {
-        $query = Pemeriksaan::with(['lansia', 'gizi'])
-            ->join('lansias', 'pemeriksaan.lansia_id', '=', 'lansias.id');
+        $query = Pemeriksaan::query()->with(['bidan', 'pendaftaran', 'pelayanan', 'pemeriksaanObat']);
 
         $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
-        $query->orderBy('lansias.nama', $sortDirection);
+        $query->orderBy('created_at', $sortDirection);
 
         $dates = $this->parseDateRange($request->date_range);
         if ($dates) {
-            $query->whereBetween('tanggal_pemeriksaan', [$dates['start'], $dates['end']]);
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
         }
 
-        return $query->get(['pemeriksaan.*']); // Pastikan hanya kolom pemeriksaan yang diambil
+        return $query->get(['pemeriksaan.*']);
     }
 
     protected function getPasienData(Request $request)
@@ -205,7 +217,7 @@ class LaporanController extends Controller
 
     protected function getObatData(Request $request)
     {
-        $query = Bidan::query();
+        $query = Obat::query();
 
         $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
         $query->orderBy('nama', $sortDirection);
@@ -215,22 +227,22 @@ class LaporanController extends Controller
             $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
         }
 
-        return $query->get(['bidan.*']);
+        return $query->get(['obat.*']);
     }
 
     protected function getPendaftaranData(Request $request)
     {
-        $query = Bidan::query();
+        $query = Pendaftaran::query()->with('pasien');
 
         $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
-        $query->orderBy('nama', $sortDirection);
+        $query->orderBy('tanggal', $sortDirection);
 
         $dates = $this->parseDateRange($request->date_range);
         if ($dates) {
             $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
         }
 
-        return $query->get(['bidan.*']);
+        return $query->get(['pendaftaran.*']);
     }
 
     protected function getPelayananData(Request $request)
@@ -246,6 +258,21 @@ class LaporanController extends Controller
         }
 
         return $query->get(['pelayanan.*']);
+    }
+
+    protected function getPembayaranData(Request $request)
+    {
+        $query = Pemeriksaan::query()->with(['bidan', 'pendaftaran', 'pelayanan', 'pemeriksaanObat']);
+
+        $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('created_at', $sortDirection);
+
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
+
+        return $query->get(['pemeriksaan.*']);
     }
 
     // Method untuk export Excel
@@ -306,17 +333,13 @@ class LaporanController extends Controller
                 return $data->map(function ($item, $index) {
                     return [
                         'No' => $index + 1,
-                        'Nama' => $item->lansia->nama ?? '-',
-                        'Tgl Lahir' => $item->lansia->tanggal_lahir ? \Carbon\Carbon::parse($item->lansia->tanggal_lahir)->format('d/m/Y') : '-',
-                        'NIK' => $item->lansia->nik ?? '-',
-                        'BB (Kg)' => $item->berat_badan ? $item->berat_badan . ' Kg' : '-',
-                        'TB (Cm)' => $item->tinggi_badan ? $item->tinggi_badan . ' Cm' : '-',
-                        'IMT (kg/m²)' => $item->imt ? $item->imt . ' kg/m²' : '-',
-                        'Tensi' => $item->analisis_tensi ?? '-',
-                        'Lingkar Perut (Cm)' => $item->lingkar_perut ? $item->lingkar_perut . ' Cm' : '-',
-                        'Gula Darah (mg/dL)' => $item->gula_darah ? $item->gula_darah . ' mg/dL' : '-',
-                        'Kesehatan' => $item->healthy_check ?? '-',
-                        'Rujukan' => $item->hospital_referral ? 'Ya' : 'Tidak'
+                        'No RM' => $item->pendaftaran->no_rm,
+                        'Nama Pasien' => $item->pendaftaran->pasien->nama,
+                        'Nama Bidan' => $item->bidan->nama,
+                        'Pelayanan' => $item->pelayanan->nama,
+                        'Keluhan' => $item->keluhan,
+                        'Obat Diberikan' => $item->pemeriksaanObat->count(),
+                        'Status' => $item->pendaftaran->status,
                     ];
                 });
             case 'pasien':
@@ -357,16 +380,32 @@ class LaporanController extends Controller
                         'Harga Jual' => 'Rp. ' . number_format($item->harga_jual, 0, ',', '.'),
                     ];
                 });
-            case 'kader':
+            case 'pendaftaran':
                 return $data->map(function ($item, $index) {
                     return [
                         'No' => $index + 1,
-                        'Nama' => $item->name,
-                        'NIK' => $item->nik ?? '-',
-                        'Email' => $item->email,
-                        'Jenis Kelamin' => $item->gender ?? '-',
-                        'Alamat' => $item->address,
-                        'No Telp' => $item->phone,
+                        'No RM' => $item->no_rm,
+                        'Nama Pasien' => $item->pasien->nama,
+                        'Alamat' => $item->pasien->alamat,
+                        'Status' => $item->status,
+                        'Tanggal Pendaftaran' => $item->tanggal
+                    ];
+                });
+            case 'pembayaran':
+                return $data->map(function ($item, $index) {
+                    return [
+                        'No' => $index + 1,
+                        'No Pemeriksaan' => $item->id,
+                        'No RM' => $item->pendaftaran->no_rm,
+                        'Nama Pasien' => $item->pendaftaran->pasien->nama,
+                        'Nama Bidan' => $item->bidan->nama,
+                        'Pelayanan' => $item->pelayanan->nama,
+                        'Jumlah Obat' => $item->pemeriksaanObat->count(),
+                        'Status' => $item->pendaftaran->status,
+                        'Total Harga' =>  'Rp ' . number_format($item->pemeriksaanObat->sum(function($item) {
+                            return $item->obat ? $item->obat->harga_beli : 0;
+                        }) + $item->pelayanan->biaya, 0, ',', '.'),
+                        'Tanggal Pendaftaran' => $item->tanggal
                     ];
                 });
             default:

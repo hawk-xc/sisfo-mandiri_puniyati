@@ -14,6 +14,14 @@ use Yajra\DataTables\Services\DataTable;
 
 class PemeriksaanObatDataTable extends DataTable
 {
+    protected $pemeriksaanId;
+
+    public function forPemeriksaan($pemeriksaanId)
+    {
+        $this->pemeriksaanId = $pemeriksaanId;
+        return $this;
+    }
+
     /**
      * Build the DataTable class.
      *
@@ -55,7 +63,11 @@ class PemeriksaanObatDataTable extends DataTable
      */
     public function query(PemeriksaanObat $model): QueryBuilder
     {
-        return $model->newQuery()->with(['pemeriksaan', 'obat']);
+        $query = $model->newQuery()
+        ->with(['pemeriksaan', 'obat'])
+        ->where('pemeriksaan_id', $this->pemeriksaanId);
+
+        return $query;
     }
 
     /**

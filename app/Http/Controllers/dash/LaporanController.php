@@ -63,6 +63,17 @@ class LaporanController extends Controller
             'Jumlah Obat',
             'Status',
             'Total Harga'
+        ],
+        'pembayaran_detail' => [
+            'Id Pemeriksaan',
+            'No RM',
+            'Nama Pasien',
+            'Nama Bidan',
+            'Pelayanan',
+            'Biaya Pelayanan',
+            'Obat',
+            'Status',
+            'Total Harga'
         ]
     ];
 
@@ -75,6 +86,7 @@ class LaporanController extends Controller
         'pendaftaran' => 'dashboard.export.pendaftaran_pdf',
         'pemeriksaan' => 'dashboard.export.pemeriksaan_pdf',
         'pembayaran' => 'dashboard.export.pembayaran_pdf',
+        'pembayaran_detail' => 'dashboard.export.pembayaran_detail_pdf'
     ];
 
     // Daftar nama file untuk export
@@ -86,6 +98,7 @@ class LaporanController extends Controller
         'pendaftaran' => 'data-pendaftaran',
         'pemeriksaan' => 'data-pemeriksaan-lansia',
         'pembayaran' => 'data-pembayaran',
+        'pembayaran_detail' => 'pembayaran-detail'
     ];
 
     /**
@@ -119,7 +132,6 @@ class LaporanController extends Controller
     }
 
     // Method untuk mendapatkan data
-    // Method untuk mendapatkan data
     protected function getExportData($dataType, Request $request)
     {
         switch ($dataType) {
@@ -137,6 +149,8 @@ class LaporanController extends Controller
                 return $this->getPendaftaranData($request);
             case 'pembayaran':
                 return $this->getPembayaranData($request);
+            case 'pembayaran_detail':
+                return $this->getPembayaranDetail($request);
             default:
                 return collect();
         }
@@ -275,6 +289,30 @@ class LaporanController extends Controller
         return $query->get(['pemeriksaan.*']);
     }
 
+    protected function getPembayaranDetail(Request $request)
+    {
+        $query = Pemeriksaan::query()->with([
+            'bidan',
+            'pendaftaran.pasien',
+            'pelayanan',
+            'pemeriksaanObat.obat'
+        ]);
+
+        if ($request->has('pemeriksaan_id')) {
+            $query->where('id', $request->pemeriksaan_id);
+        }
+
+        $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('created_at', $sortDirection);
+
+        $dates = $this->parseDateRange($request->date_range);
+        if ($dates) {
+            $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+        }
+
+        return $query->get();
+    }
+
     // Method untuk export Excel
     protected function exportToExcel($dataType, $data)
     {
@@ -309,13 +347,36 @@ class LaporanController extends Controller
     }
 
     // Method untuk export PDF
+    // Previous Version
+    // protected function exportToPdf($dataType, $data)
+    // {
+    //     $formattedData = $this->formatDataForExport($dataType, $data);
+    //     $currentDate = now()->format('d-m-Y');
+
+    //     $pdf = PDF::loadView($this->exportViews[$dataType], [
+    //         'data' => $formattedData,
+    //         'heading' => $this->exportHeadings[$dataType],
+    //         'fileName' => $this->exportFileNames[$dataType],
+    //         'currentDate' => $currentDate,
+    //         'dateRange' => request()->date_range ?? null
+    //     ])->setPaper('a4', 'landscape');
+
+    //     return $pdf->download($this->exportFileNames[$dataType] . '-' . now()->format('Ymd') . '.pdf');
+    // }
+
+    // New Version
     protected function exportToPdf($dataType, $data)
     {
         $formattedData = $this->formatDataForExport($dataType, $data);
         $currentDate = now()->format('d-m-Y');
 
+        // For pembayaran_detail, use the first item if we have a specific ID
+        $pdfData = ($dataType === 'pembayaran_detail' && request()->has('pemeriksaan_id'))
+            ? $formattedData->first()
+            : $formattedData;
+
         $pdf = PDF::loadView($this->exportViews[$dataType], [
-            'data' => $formattedData,
+            'data' => $pdfData,
             'heading' => $this->exportHeadings[$dataType],
             'fileName' => $this->exportFileNames[$dataType],
             'currentDate' => $currentDate,
@@ -407,6 +468,36 @@ class LaporanController extends Controller
                         }) + $item->pelayanan->biaya, 0, ',', '.'),
                         'Tanggal Pendaftaran' => $item->tanggal
                     ];
+                });
+            case 'pembayaran_detail':
+                return $data->map(function ($item, $index) {
+                    $obatData = $item->pemeriksaanObat->map(function ($pemeriksaanObat) {
+                        return [
+                            'id' => $pemeriksaanObat->obat->id ?? null,
+                            'nama' => $pemeriksaanObat->obat->nama ?? '-',
+                            'jenis' => $pemeriksaanObat->obat->jenis ?? '-',
+                            'harga_jual' => $pemeriksaanObat->obat->harga_jual ?? 0,
+                            'dosis' => $pemeriksaanObat->dosis ?? '-',
+                            'keterangan' => $pemeriksaanObat->keterangan ?? '-'
+                        ];
+                    })->values()->all();
+
+                    $data = collect([
+                        'No' => $index + 1,
+                        'Id Pemeriksaan' => $item->id,
+                        'No RM' => $item->pendaftaran->no_rm ?? '-',
+                        'Nama Pasien' => $item->pendaftaran->pasien->nama ?? '-',
+                        'Nama Bidan' => $item->bidan->nama ?? '-',
+                        'Pelayanan' => $item->pelayanan->nama ?? '-',
+                        'Biaya Pelayanan' => $item->pelayanan->biaya ?? 0,
+                        'Obat' => $obatData,
+                        'Status' => $item->pendaftaran->status ?? '-',
+                        'Total Harga' => ($item->pelayanan->biaya ?? 0) +
+                                        $item->pemeriksaanObat->sum(function($po) {
+                                            return $po->obat ? $po->obat->harga_jual : 0;
+                                        })
+                    ]);
+                    return $data->toArray();
                 });
             default:
                 return $data;

@@ -23,19 +23,23 @@ class PembayaranDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function($pemeriksaan) {
-                $editUrl = route('pemeriksaan.edit', $pemeriksaan->id);
-                $showUrl = route('pemeriksaan.show', $pemeriksaan->id);
-                $deleteUrl = route('pemeriksaanobat.delete', $pemeriksaan->id);
+            ->addColumn('action', function($pembayaran) {
+                $showUrl = route('pembayaran.show', $pembayaran->id);
+                $doneStatus = $pembayaran->pendaftaran->status == 'selesai';
 
-                return '<div class="flex space-x-2">
-                    <a href="'.$showUrl.'" style="background-color: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <i class="ri-eye-line"></i>
+                if ($doneStatus) {
+
+                    return '<div class="flex space-x-2">
+                    <a href="'.$showUrl.'" style="background-color: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
+                    <i class="ri-eye-line"></i>
                     </a>
                     <a href="" target="_blank" style="background-color: #F59E42; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        <i class="ri-file-pdf-line"></i>
+                    <i class="ri-file-pdf-line"></i>
                     </a>
-                </div>';
+                    </div>';
+                } else {
+                    return '<div>-</div>';
+                }
             })
             ->editColumn('created_at', function($pemeriksaan) {
                 return '<span class="badge badge-ghost">'.$pemeriksaan->created_at->format('d-m-Y H:i').'</span>';

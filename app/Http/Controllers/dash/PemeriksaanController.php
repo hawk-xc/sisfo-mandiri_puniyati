@@ -243,7 +243,8 @@ class PemeriksaanController extends Controller
     {
         $data = Pemeriksaan::findOrFail($id);
 
-        return $dataTable->render('dashboard.pemeriksaan.show', [
+        return $dataTable->forPemeriksaan($id)
+            ->render('dashboard.pemeriksaan.show', [
             'title' => 'Data Obat Pemeriksaan',
             'data' => $data
         ]);

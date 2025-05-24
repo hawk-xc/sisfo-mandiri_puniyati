@@ -33,9 +33,9 @@ class PembayaranDataTable extends DataTable
                     <a href="'.$showUrl.'" style="background-color: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
                     <i class="ri-eye-line"></i>
                     </a>
-                    <a href="" target="_blank" style="background-color: #F59E42; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <button onClick="exportDataDetail(`pembayaran_detail`, `pdf`, '.$pembayaran->id.')" style="background-color: #F59E42; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
                     <i class="ri-file-pdf-line"></i>
-                    </a>
+                    </button>
                     </div>';
                 } else {
                     return '<div>-</div>';

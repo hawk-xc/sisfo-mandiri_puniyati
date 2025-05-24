@@ -27,10 +27,27 @@
         {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
         <script>
+            // fungsi untuk melakukan export data
             function exportData(dataType, exportType) {
                 const urlParams = new URLSearchParams(window.location.search);
 
                 let url = `/dashboard/export/export/${dataType}?export_type=${exportType}`;
+
+                if (urlParams.has('sort')) {
+                    url += `&sort=${urlParams.get('sort')}`;
+                }
+
+                console.log('Export URL:', url);
+                window.location.href = url;
+            }
+
+            // fungsi untuk melakukan export data detail
+            function exportDataDetail(dataType, exportType, pemeriksaanId) {
+                const urlParams = new URLSearchParams(window.location.search);
+
+                const currentUrl = window.location.pathname;
+
+                let url = `/dashboard/export/export/${dataType}?export_type=${exportType}&pemeriksaan_id=${pemeriksaanId}`;
 
                 if (urlParams.has('sort')) {
                     url += `&sort=${urlParams.get('sort')}`;

@@ -34,12 +34,12 @@ class ProfileController extends Controller
         $user->fill([
             'name' => $request->name,
             'email' => $request->email,
-            'nik' => $request->nik,
-            'born_place' => $request->born_place,
-            'born_date' => $request->born_date,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'gender' => $request->gender,
+            // 'nik' => $request->nik,
+            // 'born_place' => $request->born_place,
+            // 'born_date' => $request->born_date,
+            // 'phone' => $request->phone,
+            // 'address' => $request->address,
+            // 'gender' => $request->gender,
         ]);
 
         if ($user->isDirty('email')) {

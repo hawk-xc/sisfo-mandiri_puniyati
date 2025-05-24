@@ -433,6 +433,16 @@
                                 Laporan
                             </a>
                         </li>
+
+                        <hr />
+
+                        <li class="mt-2">
+                            <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm  {{ isActive(request()->routeIs('profile.*')) }} rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                href="{{ route('profile.edit') }}">
+                                <i class="text-xl ri-user-6-fill"></i>
+                                Informasi Pengguna
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>

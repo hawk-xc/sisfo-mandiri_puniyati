@@ -17,12 +17,12 @@
         @csrf
         @method('patch')
 
-        <div>
+        {{-- <div>
             <x-input-label for="nik" :value="__('NIK')" />
             <x-text-input id="nik" name="nik" type="text" class="block w-full mt-1" :value="old('nik', $user->nik)"
                 required autofocus autocomplete="nik" />
             <x-input-error class="mt-2" :messages="$errors->get('nik')" />
-        </div>
+        </div> --}}
 
         <div>
             <x-input-label for="name" :value="__('Nama')" />
@@ -57,7 +57,7 @@
             @endif
         </div>
 
-        <div>
+        {{-- <div>
             <x-input-label for="born_place" :value="__('Tempat Lahir')" />
             <x-text-input id="born_place" name="born_place" type="text" class="block w-full mt-1" :value="old('born_place', $user->born_place)"
                 required autofocus autocomplete="born_place" />
@@ -95,7 +95,7 @@
                 </option>
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('gender')" />
-        </div>
+        </div> --}}
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Simpan') }}</x-primary-button>

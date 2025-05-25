@@ -74,13 +74,35 @@ class PemeriksaanDataTable extends DataTable
      */
     public function query(Pemeriksaan $model): QueryBuilder
     {
-        return $model->newQuery()
+        $query = $model->newQuery()
             ->with([
                 'pendaftaran',
                 'pendaftaran.pasien',
                 'bidan',
                 'pelayanan'
             ]);
+
+        // Filter berdasarkan request
+        if (request()->has('status') && request('status') != '') {
+            $query->whereHas('pendaftaran', function($q) {
+                $q->where('status', request('status'));
+            });
+        }
+
+        if (request()->has('pelayanan') && request('pelayanan') != '') {
+            $query->where('pelayanan_id', request('pelayanan'));
+        }
+
+        if (request()->has('date_range') && request('date_range') != '') {
+            $dates = explode(' s/d ', request('date_range'));
+            if (count($dates) == 2) {
+                $startDate = $dates[0];
+                $endDate = $dates[1];
+                $query->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            }
+        }
+
+        return $query;
     }
 
     /**

@@ -21,11 +21,13 @@ class PemeriksaanController extends Controller
      */
     public function index(PemeriksaanDataTable $dataTable)
     {
+        $pelayananOptions = Pelayanan::all();
+
         return $dataTable->render('dashboard.pemeriksaan.index', [
-            'title' => 'Data Pemeriksaan'
+            'title' => 'Data Pemeriksaan',
+            'pelayananOptions' => $pelayananOptions
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      */

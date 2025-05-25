@@ -156,27 +156,60 @@ class LaporanController extends Controller
         }
     }
 
+    // protected function parseDateRange($dateRange)
+    // {
+    //     if (empty($dateRange)) {
+    //         return null;
+    //     }
+
+    //     // Coba kedua format pemisah
+    //     $dates = explode(' to ', $dateRange);
+    //     if (count($dates) !== 2) {
+    //         $dates = explode(' - ', $dateRange);
+    //     }
+
+    //     if (count($dates) === 2) {
+    //         try {
+    //             return [
+    //                 'start' => \Carbon\Carbon::parse(trim($dates[0]))->startOfDay(),
+    //                 'end' => \Carbon\Carbon::parse(trim($dates[1]))->endOfDay()
+    //             ];
+    //         } catch (\Exception $e) {
+    //             Log::error('Error parsing date range: ' . $e->getMessage());
+    //         }
+    //     }
+
+    //     return null;
+    // }
+
     protected function parseDateRange($dateRange)
     {
         if (empty($dateRange)) {
             return null;
         }
 
-        // Coba kedua format pemisah
-        $dates = explode(' to ', $dateRange);
-        if (count($dates) !== 2) {
-            $dates = explode(' - ', $dateRange);
-        }
-
-        if (count($dates) === 2) {
-            try {
+        // Handle format "YYYY-MM-DD s/d YYYY-MM-DD"
+        if (strpos($dateRange, 's/d') !== false) {
+            $dates = explode('s/d', $dateRange);
+            if (count($dates) === 2) {
                 return [
                     'start' => \Carbon\Carbon::parse(trim($dates[0]))->startOfDay(),
                     'end' => \Carbon\Carbon::parse(trim($dates[1]))->endOfDay()
                 ];
-            } catch (\Exception $e) {
-                Log::error('Error parsing date range: ' . $e->getMessage());
             }
+        }
+
+        // Handle format lama "YYYY-MM-DD to YYYY-MM-DD" atau "YYYY-MM-DD - YYYY-MM-DD"
+        $dates = explode('to', $dateRange);
+        if (count($dates) !== 2) {
+            $dates = explode('-', $dateRange);
+        }
+
+        if (count($dates) === 2) {
+            return [
+                'start' => \Carbon\Carbon::parse(trim($dates[0]))->startOfDay(),
+                'end' => \Carbon\Carbon::parse(trim($dates[1]))->endOfDay()
+            ];
         }
 
         return null;
@@ -184,19 +217,48 @@ class LaporanController extends Controller
 
 
     // Method untuk mendapatkan data pemeriksaan
+    // protected function getPemeriksaanData(Request $request)
+    // {
+    //     $query = Pemeriksaan::query()->with(['bidan', 'pendaftaran', 'pelayanan', 'pemeriksaanObat']);
+
+    //     $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
+    //     $query->orderBy('created_at', $sortDirection);
+
+    //     $dates = $this->parseDateRange($request->date_range);
+    //     if ($dates) {
+    //         $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
+    //     }
+
+    //     return $query->get(['pemeriksaan.*']);
+    // }
+
     protected function getPemeriksaanData(Request $request)
     {
-        $query = Pemeriksaan::query()->with(['bidan', 'pendaftaran', 'pelayanan', 'pemeriksaanObat']);
+        $query = Pemeriksaan::query()->with(['bidan', 'pendaftaran', 'pendaftaran.pasien', 'pelayanan', 'pemeriksaanObat']);
 
-        $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
-        $query->orderBy('created_at', $sortDirection);
+        // Filter status
+        if ($request->has('status') && $request->status != '') {
+            $query->whereHas('pendaftaran', function($q) use ($request) {
+                $q->where('status', $request->status);
+            });
+        }
 
+        // Filter pelayanan
+        if ($request->has('pelayanan') && $request->pelayanan != '') {
+            $query->where('pelayanan_id', $request->pelayanan);
+        }
+
+        // Filter tanggal
         $dates = $this->parseDateRange($request->date_range);
         if ($dates) {
             $query->whereBetween('created_at', [$dates['start'], $dates['end']]);
         }
 
-        return $query->get(['pemeriksaan.*']);
+        // Sorting
+        $sortDirection = $request->get('sort', 'desc') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy('created_at', $sortDirection);
+
+        return $query->get();
     }
 
     protected function getPasienData(Request $request)
@@ -365,22 +427,40 @@ class LaporanController extends Controller
     // }
 
     // New Version
+    // protected function exportToPdf($dataType, $data)
+    // {
+    //     $formattedData = $this->formatDataForExport($dataType, $data);
+    //     $currentDate = now()->format('d-m-Y');
+
+    //     // For pembayaran_detail, use the first item if we have a specific ID
+    //     $pdfData = ($dataType === 'pembayaran_detail' && request()->has('pemeriksaan_id'))
+    //         ? $formattedData->first()
+    //         : $formattedData;
+
+    //     $pdf = PDF::loadView($this->exportViews[$dataType], [
+    //         'data' => $pdfData,
+    //         'heading' => $this->exportHeadings[$dataType],
+    //         'fileName' => $this->exportFileNames[$dataType],
+    //         'currentDate' => $currentDate,
+    //         'dateRange' => request()->date_range ?? null
+    //     ])->setPaper('a4', 'landscape');
+
+    //     return $pdf->download($this->exportFileNames[$dataType] . '-' . now()->format('Ymd') . '.pdf');
+    // }
+
     protected function exportToPdf($dataType, $data)
     {
         $formattedData = $this->formatDataForExport($dataType, $data);
         $currentDate = now()->format('d-m-Y');
 
-        // For pembayaran_detail, use the first item if we have a specific ID
-        $pdfData = ($dataType === 'pembayaran_detail' && request()->has('pemeriksaan_id'))
-            ? $formattedData->first()
-            : $formattedData;
-
         $pdf = PDF::loadView($this->exportViews[$dataType], [
-            'data' => $pdfData,
+            'data' => $formattedData,
             'heading' => $this->exportHeadings[$dataType],
             'fileName' => $this->exportFileNames[$dataType],
             'currentDate' => $currentDate,
-            'dateRange' => request()->date_range ?? null
+            'dateRange' => request()->date_range ?? null,
+            'status' => request()->status ?? null,
+            'pelayanan' => request()->pelayanan ?? null
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download($this->exportFileNames[$dataType] . '-' . now()->format('Ymd') . '.pdf');

@@ -110,6 +110,18 @@
         @if ($dateRange)
             <p style="font-size: 9pt;">Rentang Tanggal: {{ $dateRange }}</p>
         @endif
+
+        @if (request()->has('status') && request('status') != '')
+            <p style="font-size: 9pt;">Status: {{ ucfirst(request('status')) }}</p>
+        @endif
+
+        @if (request()->has('pelayanan') && request('pelayanan') != '')
+            @php
+                $pelayanan = \App\Models\Pelayanan::find(request('pelayanan'));
+            @endphp
+            <p style="font-size: 9pt;">Pelayanan: {{ $pelayanan->nama ?? '-' }}</p>
+        @endif
+
         <p style="font-size: 9pt;">Tanggal Export: {{ $currentDate }}</p>
     </div>
 
@@ -138,15 +150,15 @@
                     <td>{{ $item['Nama Bidan'] ?? '-' }}</td>
                     <td>{{ $item['Pelayanan'] ?? '-' }}</td>
                     <td>{{ $item['Keluhan'] ?? '-' }}</td>
-                    <td>{{ $item['Status'] ?? '-' }}</td>
-                    <td>{{ $item['Obat Diberikan'] ?? '-' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
+                    <td>{{ ucfirst($item['Status'] ?? '-') }}</td>
+                    <td>{{ $item['Obat Diberikan'] ?? '0' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item['created_at'] ?? '')->format('d/m/Y H:i') }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="12">
+                    <td colspan="9">
                         <div class="empty-data">
-                            <span>Data Kosong!</span>
+                            <span>Tidak ada data yang sesuai dengan filter!</span>
                         </div>
                     </td>
                 </tr>

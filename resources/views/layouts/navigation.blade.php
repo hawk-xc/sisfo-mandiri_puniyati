@@ -426,13 +426,13 @@
                             </a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm  {{ isActive(request()->routeIs('laporan.*')) }} rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
                                 href="{{ route('laporan.index') }}">
                                 <i class="text-xl ri-database-line"></i>
                                 Laporan
                             </a>
-                        </li>
+                        </li> --}}
 
                         <hr />
 

@@ -1,4 +1,17 @@
 <x-app-layout>
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                callToast('success', '{{ session('success') }}')
+            })
+        </script>
+    @elseif (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                callToast('error', '{{ session('error') }}')
+            })
+        </script>
+    @endif
     <div class="p-6">
         <div class="shadow-xl card bg-base-100">
             <div class="card-body">

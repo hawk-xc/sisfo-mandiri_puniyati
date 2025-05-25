@@ -64,10 +64,10 @@
 </head>
 
 @php
-    function isActive($page)
+    function isActive($page, $isMasterdata = false)
     {
         if ($page) {
-            return 'bg-slate-600 text-white hover:sg-slate-500';
+            return 'bg-slate-600 text-white hover:sg-slate-500' . ($isMasterdata ? ' hs-accordion-active:block' : '');
         } else {
             return 'text-gray-800 hover:bg-gray-200';
         }
@@ -312,47 +312,47 @@
 
                         <li class="hs-accordion" id="users-accordion">
                             <button type="button"
-                                class="hs-accordion-toggle w-full text-start flex flex-row justify-between items-center gap-3 py-1 px-2.5 rounded-lg {{ isActive(request()->is('dashboard/masterdata/*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                aria-expanded="true" aria-controls="users-accordion-child">
+                                class="hs-accordion-toggle w-full text-start flex flex-row justify-between items-center gap-3 py-1 px-2.5 rounded-lg {{ isActive(request()->is('dashboard/masterdata/*'), true) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                aria-expanded="{{ request()->is('dashboard/masterdata/*') ? 'true' : 'false' }}"
+                                aria-controls="users-accordion-child">
                                 <span class="flex flex-row items-center gap-3">
                                     <i class="text-xl ri-pie-chart-line"></i>
                                     Master Data
                                 </span>
-
-                                <i class="text-xl ri-arrow-down-s-line"></i>
+                                <i class="text-xl ri-arrow-down-s-line hs-accordion-active:hidden"></i>
+                                <i class="hidden text-xl ri-arrow-up-s-line hs-accordion-active:block"></i>
                             </button>
 
                             <div id="users-accordion-child"
-                                class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden"
+                                class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 {{ request()->is('dashboard/masterdata/*') ? '!block' : 'hidden' }}"
                                 role="region" aria-labelledby="users-accordion">
                                 <ul class="pt-1 space-y-1 hs-accordion-group ps-8" data-hs-accordion-always-open>
-                                    <ul class="pt-1 space-y-1">
-                                        <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('bidan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="{{ route('bidan.index') }}">
-                                                Data Bidan
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pasien.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="{{ route('pasien.index') }}">
-                                                Data Pasien
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pelayanan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="{{ route('pelayanan.index') }}">
-                                                Data Pelayanan
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('obat.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
-                                                href="{{ route('obat.index') }}">
-                                                Data Obat
-                                            </a>
-                                        </li>
+                                    <li>
+                                        <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('bidan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            href="{{ route('bidan.index') }}">
+                                            Data Bidan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pasien.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            href="{{ route('pasien.index') }}">
+                                            Data Pasien
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('pelayanan.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            href="{{ route('pelayanan.index') }}">
+                                            Data Pelayanan
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg {{ isActive(request()->routeIs('obat.*')) }} text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white"
+                                            href="{{ route('obat.index') }}">
+                                            Data Obat
+                                        </a>
+                                    </li>
 
-                                        {{-- <li class="hs-accordion" id="users-accordion-sub-1">
+                                    {{-- <li class="hs-accordion" id="users-accordion-sub-1">
                                             <button type="button"
                                                 class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200"
                                                 aria-expanded="true" aria-controls="users-accordion-sub-1-child">
@@ -398,7 +398,7 @@
                                                 </ul>
                                             </div>
                                         </li> --}}
-                                    </ul>
+                                </ul>
                             </div>
                         </li>
 

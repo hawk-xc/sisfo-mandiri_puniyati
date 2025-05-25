@@ -11,7 +11,7 @@
         </div>
 
         <!-- NIK -->
-        <div class="mt-4">
+        {{-- <div class="mt-4">
             <x-input-label for="nik" :value="__('NIK')" />
             <x-text-input id="nik" class="block w-full mt-1" type="text" name="nik" :value="old('nik')"
                 required autofocus autocomplete="nik" placeholder="Masukkan NIK" />
@@ -24,7 +24,7 @@
             <x-text-input id="phone" class="block w-full mt-1" type="text" name="phone" :value="old('phone')"
                 required autofocus autocomplete="phone" placeholder="Masukkan No telepon" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-        </div>
+        </div> --}}
 
         <!-- Email Address -->
         <div class="mt-4">

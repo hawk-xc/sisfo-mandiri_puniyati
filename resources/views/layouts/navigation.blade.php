@@ -443,6 +443,16 @@
                                 Informasi Pengguna
                             </a>
                         </li>
+                        <li class="w-full mt-2">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="flex items-center flex-row gap-x-3.5 py-1 px-2.5 text-sm rounded-lg focus:outline-hidden hover:bg-slate-700 focus:outline-hidden focus:bg-slate-900 text-white w-full">
+                                    <i class="text-xl ri-logout-box-r-line"></i>
+                                    Log out
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </nav>
             </div>

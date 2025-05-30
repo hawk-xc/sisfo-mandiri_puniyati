@@ -32,9 +32,16 @@ class LaporanController extends Controller
             'Stok'
         ],
         'pasien' => [
+            'NIK',
             'Nama',
+            'Tempat Lahir',
+            'Tanggal Lahir',
             'Alamat',
+            'Agama',
+            'Pendidikan',
+            'Pekerjaan',
             'Penanggung Jawab',
+            'Golongan Darah',
             'No Telp'
         ],
         'pelayanan' => [
@@ -488,9 +495,16 @@ class LaporanController extends Controller
                 return $data->map(function ($item, $index) {
                     return [
                         'No' => $index + 1,
+                        'NIK' => $item->nik,
                         'Nama' => $item->nama,
+                        'Tempat Lahir' => $item->tempat_lahir,
+                        'Tanggal Lahir' => $item->tanggal_lahir,
                         'Alamat' => $item->alamat,
+                        'Agama' => $item->agama,
+                        'Pendidikan' => $item->pendidikan,
+                        'Pekerjaan' => $item->pekerjaan,
                         'Penanggung Jawab' => $item->penanggung_jawab,
+                        'Golongan Darah' => $item->golda,
                         'No Telp' => $item->no_telp,
                     ];
                 });

@@ -29,7 +29,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9pt;
+            font-size: 7pt;
             text-align: left;
             border: 1px solid #000;
             /* Garis lebih tegas */
@@ -117,9 +117,16 @@
         <thead>
             <tr>
                 <th class="no-column">No</th>
+                <th>NIK</th>
                 <th>Nama</th>
+                <th>Tempat Lahir</th>
+                <th>Tanggal Lahir</th>
                 <th>Alamat</th>
+                <th>Agama</th>
+                <th>Pendidikan</th>
+                <th>Pekerjaan</th>
                 <th>Penanggung Jawab</th>
+                <th>Golongan Darah</th>
                 <th>No Telp</th>
                 <th>Ditambahkan</th>
             </tr>
@@ -130,9 +137,16 @@
                 @php $counter++; @endphp
                 <tr>
                     <td class="no-column">{{ $counter }}</td>
+                    <td>{{ $item['NIK'] ?? '-' }}</td>
                     <td>{{ $item['Nama'] ?? '-' }}</td>
+                    <td>{{ $item['Tempat Lahir'] ?? '-' }}</td>
+                    <td>{{ $item['Tanggal Lahir'] ?? '-' }}</td>
                     <td>{{ $item['Alamat'] ?? '-' }}</td>
+                    <td>{{ $item['Agama'] ?? '-' }}</td>
+                    <td>{{ $item['Pendidikan'] ?? '-' }}</td>
+                    <td>{{ $item['Pekerjaan'] ?? '-' }}</td>
                     <td>{{ $item['Penanggung Jawab'] ?? '-' }}</td>
+                    <td>{{ $item['Golongan Darah'] ?? '-' }}</td>
                     <td>{{ $item['No Telp'] ?? '-' }}</td>
                     <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
                 </tr>

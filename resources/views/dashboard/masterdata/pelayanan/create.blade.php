@@ -19,6 +19,11 @@
                                 <legend class="text-lg fieldset-legend">Nama Pelayanan</legend>
                                 <select name="nama_pelayanan" class="w-full select">
                                     <option value="" disabled selected>Pilih Nama Pelayanan</option>
+                                    <option value="usg" {{ old('nama') == 'usg' ? 'selected' : '' }}>USG Kehamilan
+                                    </option>
+                                    <option value="vaksinasi" {{ old('nama') == 'vaksinasi' ? 'selected' : '' }}>
+                                        Vaksinasi Anak
+                                    </option>
                                     <option value="anc" {{ old('nama') == 'anc' ? 'selected' : '' }}>ANC</option>
                                     <option value="kia" {{ old('nama') == 'kia' ? 'selected' : '' }}>KIA</option>
                                     <option value="ibu nifas" {{ old('nama') == 'ibu nifas' ? 'selected' : '' }}>Ibu

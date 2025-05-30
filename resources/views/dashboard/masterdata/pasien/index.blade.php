@@ -17,12 +17,14 @@
             <div class="card-body">
                 <div id="head" class="flex flex-row justify-between">
                     <h2 class="mb-6 text-2xl font-bold card-title">Data Pasien</h2>
-                    {{-- <a href="{{ route('pasien.create') }}" class="btn btn-primary">
-                        <i class="ri-add-line"></i> Tambah data
-                    </a> --}}
-                    <button onclick="exportData('pasien', 'pdf')" class="btn btn-outline btn-neutral btn-sm">
-                        <i class="ri-file-pdf-2-line"></i> Export PDF
-                    </button>
+                    <div>
+                        <a href="{{ route('pasien.create') }}" class="btn btn-primary btn-sm">
+                            <i class="ri-add-line"></i> Tambah data
+                        </a>
+                        <button onclick="exportData('pasien', 'pdf')" class="btn btn-outline btn-neutral btn-sm">
+                            <i class="ri-file-pdf-2-line"></i> Export PDF
+                        </button>
+                    </div>
                 </div>
                 {{ $dataTable->table(['class' => 'w-full table table-zebra mt-2 hover:table-auto']) }}
             </div>

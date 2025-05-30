@@ -106,6 +106,8 @@
     <div class="header">
         <h2 class="font-bold">DATA BIDAN</h2>
         <p class="font-bold">KLINIK NGUDI WALUYO</p>
+        <img src="https://imgs.search.brave.com/o6HZrFQfBPc_U8OgcyveQgzFC0aGpOtDXMjSEnJaTD8/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9hcG9s/bG8ub2x4LmNvLmlk/L3YxL2ZpbGVzL2Vn/aWtiamFkejQ0eS1J/RC9pbWFnZTtzPTI3/Mngw.jpeg"
+            alt="app_logo">
 
         @if ($dateRange)
             <p style="font-size: 9pt;">Rentang Tanggal: {{ $dateRange }}</p>

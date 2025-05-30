@@ -1,5 +1,9 @@
 <x-app-layout>
+    {{-- @if ($errors->any())
+        {{ dd($errors->all()) }}
+    @endif --}}
     <div class="p-6">
+
         <div class="shadow-xl card bg-base-100">
             <div class="card-body">
                 <div id="head" class="flex flex-row justify-between">
@@ -60,7 +64,7 @@
                                 @enderror
                             </fieldset>
                             {{-- input jadwal praktek --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Jadwal Praktek</legend>
                                 <select name="jadwal_praktek[]" id="jadwal-praktek"
                                     class="w-full input select2-custom-height" multiple>
@@ -89,6 +93,21 @@
                                 @error('jadwal_praktek')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
+                            </fieldset> --}}
+                            {{-- input jam praktek --}}
+                            <fieldset class="fieldset">
+                                <legend class="text-lg fieldset-legend">Jam Praktek</legend>
+                                <input type="time" name="jadwal_praktek_mulai" class="w-full mb-2 input"
+                                    value="{{ old('jadwal_praktek_mulai') }}" />
+                                <span class="mx-2">s/d</span>
+                                <input type="time" name="jadwal_praktek_selesai" class="w-full input"
+                                    value="{{ old('jadwal_praktek_selesai') }}" />
+                                @error('jadwal_praktek_mulai')
+                                    <span class="text-sm text-red-500">{{ $message }}</span>
+                                @enderror
+                                @error('jadwal_praktek_selesai')
+                                    <span class="text-sm text-red-500">{{ $message }}</span>
+                                @enderror
                             </fieldset>
                         </div>
                         <div class="flex flex-row justify-end mt-10">
@@ -100,6 +119,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     @push('styles')
         <style>

@@ -36,6 +36,9 @@ class BidanDataTable extends DataTable
                     </form>
                 </div>';
             })
+            ->addColumn('jadwal_praktek_keterangan', function($query) {
+                return $query->jadwal_praktek_mulai . ' s/d ' . $query->jadwal_praktek_selesai;
+            })
             ->editColumn('created_at', function($bidan) {
                 return '<span class="badge badge-ghost">'.$bidan->created_at->format('d-m-Y H:i').'</span>';
             })
@@ -106,7 +109,7 @@ class BidanDataTable extends DataTable
             Column::make('no_telp')
                 ->title('No. Telp')
                 ->addClass('text-start'),
-            Column::make('jadwal_praktek')
+            Column::make('jadwal_praktek_keterangan')
                 ->title('Jadwal Praktek')
                 ->addClass('text-start font-semibold'),
             Column::make('created_at')

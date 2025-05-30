@@ -37,7 +37,8 @@ class BidanController extends Controller
             'nama' => 'required|string',
             'alamat' => 'required|string',
             'no_telp' => 'required|string',
-            'jadwal_praktek.*' => 'nullable|string'
+            'jadwal_praktek_mulai' => 'required|string',
+            'jadwal_praktek_selesai' => 'required|string'
         ], [
             'bidan_picture.nullable' => 'Foto bidan bersifat opsional.',
             'bidan_picture.image' => 'File harus berupa gambar.',
@@ -48,14 +49,13 @@ class BidanController extends Controller
             'alamat.string' => 'Alamat bidan harus berupa teks.',
             'no_telp.required' => 'Nomor telepon bidan wajib diisi.',
             'no_telp.string' => 'Nomor telepon bidan harus berupa teks.',
-            'jadwal_praktek.*.nullable' => 'Jadwal praktek bersifat opsional.',
-            'jadwal_praktek.*.string' => 'Jadwal praktek harus berupa teks.'
+            'jadwal_praktek_mulai.required' => 'Jam mulai praktek wajib diisi.',
+            'jadwal_praktek_mulai.string' => 'Jam mulai praktek harus berupa teks.',
+            'jadwal_praktek_selesai.required' => 'Jam selesai praktek wajib diisi.',
+            'jadwal_praktek_selesai.string' => 'Jam selesai praktek harus berupa teks.',
         ]);
 
         try {
-            // Ubah array jadwal_praktek menjadi string dipisah koma
-            $jadwalPraktek = implode(',', $request->input('jadwal_praktek', []));
-
             $filename = null;
 
             // Jika ada file bidan_picture diupload
@@ -71,11 +71,13 @@ class BidanController extends Controller
                 'nama' => $request->input('nama'),
                 'alamat' => $request->input('alamat'),
                 'no_telp' => $request->input('no_telp'),
-                'jadwal_praktek' => $jadwalPraktek
+                'jadwal_praktek_mulai' => $request->input('jadwal_praktek_mulai'),
+                'jadwal_praktek_selesai' => $request->input('jadwal_praktek_selesai')
             ]);
 
             return redirect()->route('bidan.index')->with('success', 'Data bidan berhasil disimpan.');
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->route('bidan.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -116,7 +118,8 @@ class BidanController extends Controller
             'nama' => 'required|string',
             'alamat' => 'required|string',
             'no_telp' => 'required|string',
-            'jadwal_praktek.*' => 'nullable|string'
+            'jadwal_praktek_mulai' => 'required|string',
+            'jadwal_praktek_selesai' => 'required|string'
         ], [
             'bidan_picture.nullable' => 'Foto bidan bersifat opsional.',
             'bidan_picture.image' => 'File harus berupa gambar.',
@@ -127,8 +130,10 @@ class BidanController extends Controller
             'alamat.string' => 'Alamat bidan harus berupa teks.',
             'no_telp.required' => 'Nomor telepon bidan wajib diisi.',
             'no_telp.string' => 'Nomor telepon bidan harus berupa teks.',
-            'jadwal_praktek.*.nullable' => 'Jadwal praktek bersifat opsional.',
-            'jadwal_praktek.*.string' => 'Jadwal praktek harus berupa teks.'
+            'jadwal_praktek_mulai.required' => 'Jam mulai praktek wajib diisi.',
+            'jadwal_praktek_mulai.string' => 'Jam mulai praktek harus berupa teks.',
+            'jadwal_praktek_selesai.required' => 'Jam selesai praktek wajib diisi.',
+            'jadwal_praktek_selesai.string' => 'Jam selesai praktek harus berupa teks.',
         ]);
 
         try {
@@ -143,14 +148,13 @@ class BidanController extends Controller
                 $file->storeAs('bidan_', $filename, 'public');
             }
 
-            $jadwalPraktek = implode(',', $request->input('jadwal_praktek', []));
-
             $bidan->update([
                 'bidan_picture' => $filename,
                 'nama' => $request->input('nama'),
                 'alamat' => $request->input('alamat'),
                 'no_telp' => $request->input('no_telp'),
-                'jadwal_praktek' => $jadwalPraktek
+                'jadwal_praktek_mulai' => $request->input('jadwal_praktek_mulai'),
+                'jadwal_praktek_selesai' => $request->input('jadwal_praktek_selesai')
             ]);
 
             return redirect()->route('bidan.index')->with('success', 'Data bidan berhasil diperbarui.');

@@ -499,7 +499,7 @@ class LaporanController extends Controller
                         'No' => $index + 1,
                         'Nama' => $item->nama,
                         'No Telp' => $item->no_telp,
-                        'Jadwal Praktek' => $item->jadwal_praktek,
+                        'Jadwal Praktek' => $item->jadwal_praktek_mulai . ' s/d ' . $item->jadwal_praktek_selesai,
                     ];
                 });
             case 'pelayanan':

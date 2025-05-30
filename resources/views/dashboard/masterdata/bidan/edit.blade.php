@@ -61,7 +61,7 @@
                                 @enderror
                             </fieldset>
                             {{-- input jadwal praktek --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Jadwal Praktek</legend>
                                 @php
                                     $selectedDays = old('jadwal_praktek', explode(',', $data->jadwal_praktek ?? ''));
@@ -77,6 +77,20 @@
                                     @endforeach
                                 </select>
                                 @error('jadwal_praktek')
+                                    <span class="text-sm text-red-500">{{ $message }}</span>
+                                @enderror
+                            </fieldset> --}}
+                            <fieldset class="fieldset">
+                                <legend class="text-lg fieldset-legend">Jam Praktek</legend>
+                                <input type="time" name="jadwal_praktek_mulai" class="w-full mb-2 input"
+                                    value="{{ old('jadwal_praktek_mulai', $data->jadwal_praktek_mulai) }}" />
+                                <span class="mx-2">s/d</span>
+                                <input type="time" name="jadwal_praktek_selesai" class="w-full input"
+                                    value="{{ old('jadwal_praktek_selesai', $data->jadwal_praktek_selesai) }}" />
+                                @error('jadwal_praktek_mulai')
+                                    <span class="text-sm text-red-500">{{ $message }}</span>
+                                @enderror
+                                @error('jadwal_praktek_selesai')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
                             </fieldset>

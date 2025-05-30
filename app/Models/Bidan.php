@@ -23,7 +23,8 @@ class Bidan extends Model
         'nama',
         'alamat',
         'no_telp',
-        'jadwal_praktek'
+        'jadwal_praktek_mulai',
+        'jadwal_praktek_selesai'
     ];
 
     public function pemeriksaan() {

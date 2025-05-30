@@ -104,6 +104,9 @@ class BidanDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('kode_bidan')
+                ->title('Kode Bidan')
+                ->addClass('font-medium'),
             Column::make('nama')
                 ->addClass('font-medium'),
             Column::make('no_telp')

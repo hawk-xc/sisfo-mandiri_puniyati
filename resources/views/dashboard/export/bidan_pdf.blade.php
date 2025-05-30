@@ -117,6 +117,7 @@
         <thead>
             <tr>
                 <th class="no-column">No</th>
+                <th>Kode Bidan</th>
                 <th>Nama</th>
                 <th>No Telp</th>
                 <th>Jadwal Praktek</th>
@@ -129,6 +130,7 @@
                 @php $counter++; @endphp
                 <tr>
                     <td class="no-column">{{ $counter }}</td>
+                    <td>{{ $item['Kode Bidan'] ?? '-' }}</td>
                     <td>{{ $item['Nama'] ?? '-' }}</td>
                     <td>{{ $item['No Telp'] ?? '-' }}</td>
                     <td>{{ $item['Jadwal Praktek'] ?? '-' }}</td>

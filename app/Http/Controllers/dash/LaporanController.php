@@ -21,6 +21,7 @@ class LaporanController extends Controller
     // Daftar heading untuk masing-masing jenis data
     protected $exportHeadings = [
         'bidan' => [
+            'Kode Bidan',
             'Nama',
             'No Telp',
             'Jadwal Praktek'
@@ -497,6 +498,7 @@ class LaporanController extends Controller
                 return $data->map(function ($item, $index) {
                     return [
                         'No' => $index + 1,
+                        'Kode Bidan' => $item->kode_bidan,
                         'Nama' => $item->nama,
                         'No Telp' => $item->no_telp,
                         'Jadwal Praktek' => $item->jadwal_praktek_mulai . ' s/d ' . $item->jadwal_praktek_selesai,

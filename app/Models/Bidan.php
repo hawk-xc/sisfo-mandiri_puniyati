@@ -20,6 +20,7 @@ class Bidan extends Model
 
     protected $fillable = [
         'bidan_picture',
+        'kode_bidan',
         'nama',
         'alamat',
         'no_telp',

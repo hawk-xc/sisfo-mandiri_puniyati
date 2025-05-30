@@ -65,8 +65,8 @@ class BidanController extends Controller
                 $file->storeAs('bidan_', $filename, 'public');
             }
 
-            // Simpan ke database
-            Bidan::create([
+            $bidan = Bidan::create([
+                'kode_bidan' => '', // Temporary value, will be updated after insert
                 'bidan_picture' => $filename,
                 'nama' => $request->input('nama'),
                 'alamat' => $request->input('alamat'),
@@ -74,6 +74,11 @@ class BidanController extends Controller
                 'jadwal_praktek_mulai' => $request->input('jadwal_praktek_mulai'),
                 'jadwal_praktek_selesai' => $request->input('jadwal_praktek_selesai')
             ]);
+
+            // Update kode_bidan setelah mendapatkan id
+            $kode_bidan = 'B' . str_pad($bidan->id, 3, '0', STR_PAD_LEFT);
+            $bidan->kode_bidan = $kode_bidan;
+            $bidan->save();
 
             return redirect()->route('bidan.index')->with('success', 'Data bidan berhasil disimpan.');
         } catch (\Exception $e) {

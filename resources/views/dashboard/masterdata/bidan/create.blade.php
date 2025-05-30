@@ -52,8 +52,9 @@
                             {{-- input no_telp --}}
                             <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">No telp</legend>
-                                <input type="number" name="no_telp" class="w-full input" placeholder="no_telp"
-                                    value="{{ old('no_telp') }}" />
+                                <input type="text" name="no_telp" class="w-full input" placeholder="no_telp"
+                                    value="{{ old('no_telp') }}"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
                                 @error('no_telp')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror

@@ -62,6 +62,9 @@ class ObatController extends Controller
             $data->harga_jual = $request->harga_jual;
             $data->save();
 
+            $data->kode_obat = 'OB' . str_pad($data->id, 5, '0', STR_PAD_LEFT);
+            $data->save();
+
             return redirect()->route('obat.index')->with('success', 'Data Obat berhasil disimpan!');
         } catch (Exception $e) {
             return redirect()->route('obat.index')->with('error', 'Data Obat gagal disimpan!');

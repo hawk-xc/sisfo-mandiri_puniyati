@@ -27,6 +27,7 @@ class LaporanController extends Controller
             'Jadwal Praktek'
         ],
         'obat' => [
+            'Kode Obat',
             'Nama',
             'Jenis',
             'Stok'
@@ -530,6 +531,7 @@ class LaporanController extends Controller
                 return $data->map(function ($item, $index) {
                     return [
                         'No' => $index + 1,
+                        'Kode Obat' => $item->kode_obat,
                         'Nama' => $item->nama,
                         'Jenis' => $item->jenis,
                         'Stok' => $item->stok,

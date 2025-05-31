@@ -117,6 +117,7 @@
         <thead>
             <tr>
                 <th class="no-column">No</th>
+                <th>Kode Obat</th>
                 <th>Nama</th>
                 <th>Jenis</th>
                 <th>Jumlah Stok</th>
@@ -131,6 +132,7 @@
                 @php $counter++; @endphp
                 <tr>
                     <td class="no-column">{{ $counter }}</td>
+                    <td>{{ $item['Kode Obat'] ?? '-' }}</td>
                     <td>{{ $item['Nama'] ?? '-' }}</td>
                     <td>{{ $item['Jenis'] ?? '-' }}</td>
                     <td>{{ $item['Stok'] ?? '-' }}</td>

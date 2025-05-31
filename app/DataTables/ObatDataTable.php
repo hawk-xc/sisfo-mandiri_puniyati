@@ -102,6 +102,9 @@ class ObatDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('kode_obat')
+                ->title('Kode Obat')
+                ->addClass('text-start'),
             Column::make('nama')
                 ->addClass('font-medium'),
             Column::make('jenis')

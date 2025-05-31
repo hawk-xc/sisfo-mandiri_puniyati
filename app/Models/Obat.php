@@ -22,7 +22,9 @@ class Obat extends Model
         'jenis',
         'stok',
         'harga_beli',
-        'harga_jual'
+        'harga_jual',
+        // new column
+        'kode_obat',
     ];
 
     public function pemeriksaanObat()

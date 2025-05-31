@@ -118,7 +118,7 @@
             <tr>
                 <th class="no-column">No</th>
                 <th>Nama</th>
-                <th>Biaya</th>
+                {{-- <th>Biaya</th> --}}
                 <th>Ditambahkan</th>
             </tr>
         </thead>
@@ -129,7 +129,7 @@
                 <tr>
                     <td class="no-column">{{ $counter }}</td>
                     <td>{{ $item['Nama'] ?? '-' }}</td>
-                    <td>{{ $item['Biaya'] ?? '-' }}</td>
+                    {{-- <td>{{ $item['Biaya'] ?? '-' }}</td> --}}
                     <td>{{ \Carbon\Carbon::parse($item->created_at ?? '')->format('d/m/Y') }}</td>
                 </tr>
             @empty

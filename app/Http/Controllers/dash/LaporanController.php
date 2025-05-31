@@ -46,7 +46,7 @@ class LaporanController extends Controller
         ],
         'pelayanan' => [
             'Nama',
-            'Biaya'
+            // 'Biaya'
         ],
         'pendaftaran' => [
             'No RM',
@@ -523,7 +523,7 @@ class LaporanController extends Controller
                     return [
                         'No' => $index + 1,
                         'Nama' => $item->nama,
-                        'Biaya' => 'Rp. ' . number_format($item->biaya, 0, ',', '.'),
+                        // 'Biaya' => 'Rp. ' . number_format($item->biaya, 0, ',', '.'),
                     ];
                 });
             case 'obat':

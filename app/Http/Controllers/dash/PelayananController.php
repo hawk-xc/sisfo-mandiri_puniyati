@@ -35,18 +35,18 @@ class PelayananController extends Controller
     {
         $request->validate([
             'nama_pelayanan' => 'required|string',
-            'biaya' => 'required|numeric'
+            // 'biaya' => 'required|numeric'
         ], [
             'nama_pelayanan.required' => 'Nama pelayanan wajib diisi.',
             'nama_pelayanan.string' => 'Nama pelayanan harus berupa teks.',
-            'biaya.required' => 'Biaya wajib diisi.',
-            'biaya.numeric' => 'Biaya harus berupa angka.'
+            // 'biaya.required' => 'Biaya wajib diisi.',
+            // 'biaya.numeric' => 'Biaya harus berupa angka.'
         ]);
 
         try {
             Pelayanan::create([
                 'nama' => $request->nama_pelayanan,
-                'biaya' => $request->biaya
+                'biaya' => 0
             ]);
 
             return redirect()->route('pelayanan.index')->with('success', 'Data Pelayanan berhasil disimpan.');

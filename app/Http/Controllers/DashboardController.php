@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use \App\Models\Lansia;
 use \App\Models\Pemeriksaan;
-use \App\Models\User;
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use App\Models\Bidan;
+use App\Models\Pasien;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $data = [
+            'pasien_count' => Pasien::get()->count(),
+            'pemeriksaan_count' => Pemeriksaan::get()->count(),
+            'bidan_count' => Bidan::get()->count()
+        ];
+
+        return view('dashboard',
+    ['data' => $data]);
     }
 }

@@ -17,7 +17,7 @@
                         </span>
                         <span>Tanggal Pemeriksaan : {{ $data->created_at->translatedFormat('l, d F Y') }}</span>
                     </span>
-                    @if (!$data->pendaftaran->status === 'selesai')
+                    @if ($data->pendaftaran->status === 'menunggu')
                         <a href="{{ route('pendaftaranstatus.update', $data->pendaftaran->id) }}"
                             class="btn btn-outline btn-primary btn-sm"
                             onclick="return confirm('Yakin ingin mengubah status?')">Ubah status</a>

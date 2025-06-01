@@ -18,9 +18,9 @@
                 <div id="head" class="flex flex-row justify-between">
                     <h2 class="mb-6 text-2xl font-bold card-title">Data Pelayanan</h2>
                     <div>
-                        <a href="{{ route('pelayanan.create') }}" class="btn btn-primary btn-sm">
+                        {{-- <a href="{{ route('pelayanan.create') }}" class="btn btn-primary btn-sm">
                             <i class="ri-add-line"></i> Tambah data
-                        </a>
+                        </a> --}}
                         <button onclick="exportData('pelayanan', 'pdf')" class="btn btn-outline btn-neutral btn-sm">
                             <i class="ri-file-pdf-2-line"></i> Export PDF
                         </button>

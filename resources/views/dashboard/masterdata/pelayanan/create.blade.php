@@ -36,7 +36,7 @@
                                 @enderror
                             </fieldset>
                             {{-- input biaya --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Biaya</legend>
 
                                 <label class="w-full input">
@@ -47,7 +47,7 @@
                                 @error('biaya')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
                         </div>
                         <div class="flex flex-row justify-end mt-10">
                             <button type="submit" class="btn btn-primary">

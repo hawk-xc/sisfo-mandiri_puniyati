@@ -22,25 +22,28 @@ class PelayananDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function($pelayanan) {
-                $editUrl = route('pelayanan.edit', $pelayanan->id);
-                $deleteUrl = route('pelayanan.destroy', $pelayanan->id);
+            // ->addColumn('action', function($pelayanan) {
+            //     $editUrl = route('pelayanan.edit', $pelayanan->id);
+            //     $deleteUrl = route('pelayanan.destroy', $pelayanan->id);
 
-                // <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        // <i class="ri-edit-line"></i>
-                    // </a>
+            //     // <a href="'.$editUrl.'" style="background-color: #FFA500; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            //             // <i class="ri-edit-line"></i>
+            //         // </a>
 
-                return '<div class="flex space-x-2">
-                    <form action="'.$deleteUrl.'" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus data ini?\')">
-                        '.csrf_field().method_field('DELETE').'
-                        <button type="submit" style="background-color: #F34B3E; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                            <i class="ri-delete-bin-line"></i>
-                        </button>
-                    </form>
-                </div>';
-            })
+            //     return '<div class="flex space-x-2">
+            //         <form action="'.$deleteUrl.'" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus data ini?\')">
+            //             '.csrf_field().method_field('DELETE').'
+            //             <button type="submit" style="background-color: #F34B3E; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            //                 <i class="ri-delete-bin-line"></i>
+            //             </button>
+            //         </form>
+            //     </div>';
+            // })
             ->editColumn('created_at', function($pelayanan) {
                 return '<span class="badge badge-ghost">'.$pelayanan->created_at->format('d-m-Y H:i').'</span>';
+            })
+            ->addColumn('nama_pelayanan', function($pelayanan) {
+                return strtoupper($pelayanan->nama);
             })
             // ->editColumn('biaya', function($pelayanan) {
             //     return 'Rp. ' . number_format($pelayanan->biaya, 0, ',', '.');
@@ -103,19 +106,20 @@ class PelayananDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('nama')
-                ->addClass('font-medium'),
+            Column::make('nama_pelayanan')
+                ->title('Nama Pelayanan')
+                ->addClass('font-medium text-uppercase'),
             // Column::make('biaya')
             //     ->title('Biaya')
             //     ->addClass('text-start font-semibold'),
             Column::make('created_at')
                 ->title('Dibuat')
                 ->addClass('text-start font-semibold'),
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(180)
-                ->addClass('text-start font-semibold'),
+            // Column::computed('action')
+            //     ->exportable(false)
+            //     ->printable(false)
+            //     ->width(180)
+            //     ->addClass('text-start font-semibold'),
         ];
     }
 

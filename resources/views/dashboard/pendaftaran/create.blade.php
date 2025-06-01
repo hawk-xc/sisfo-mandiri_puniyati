@@ -36,57 +36,57 @@
                             </fieldset>
 
                             {{-- input alamat pasien --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Alamat Pasien</legend>
                                 <input type="text" name="alamat" id="alamat" class="w-full input"
                                     placeholder="Alamat Pasien" value="{{ old('alamat') }}" />
                                 @error('alamat')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input NIK --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">NIK</legend>
                                 <input type="text" name="nik" id="nik" class="w-full input"
                                     placeholder="NIK" value="{{ old('nik') }}" />
                                 @error('nik')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input Nama KK --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Nama KK</legend>
                                 <input type="text" name="nama_kk" id="nama_kk" class="w-full input"
                                     placeholder="Nama KK" value="{{ old('nama_kk') }}" />
                                 @error('nama_kk')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input tempat lahir --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Tempat Lahir</legend>
                                 <input type="text" name="tempat_lahir" id="tempat_lahir" class="w-full input"
                                     placeholder="Tempat Lahir" value="{{ old('tempat_lahir') }}" />
                                 @error('tempat_lahir')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input tanggal lahir --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Tanggal Lahir</legend>
                                 <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="w-full input"
                                     placeholder="Tanggal Lahir" value="{{ old('tanggal_lahir') }}" />
                                 @error('tanggal_lahir')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input agama --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Agama</legend>
                                 <select name="agama" id="agama" class="w-full select">
                                     <option value="">Pilih Agama</option>
@@ -100,10 +100,10 @@
                                 @error('agama')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input Pendidikan --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Pendidikan</legend>
                                 <select name="pendidikan" id="pendidikan" class="w-full select">
                                     <option value="">Pilih Pendidikan</option>
@@ -117,10 +117,10 @@
                                 @error('pendidikan')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input pekerjaan --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Pekerjaan</legend>
                                 <select name="pekerjaan" id="pekerjaan" class="w-full select">
                                     <option value="">Pilih Pekerjaan</option>
@@ -134,10 +134,10 @@
                                 @error('pekerjaan')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input penanggung jawab --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Penanggung Jawab</legend>
                                 <input type="text" name="penanggung_jawab" id="penanggung_jawab"
                                     class="w-full input" placeholder="Penanggung Jawab"
@@ -145,10 +145,10 @@
                                 @error('penanggung_jawab')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input golda --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">Golongan Darah</legend>
                                 <select name="golda" id="golda" class="w-full select">
                                     <option value="">Pilih Golongan Darah</option>
@@ -162,24 +162,24 @@
                                 @error('golda')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input no_telp --}}
-                            <fieldset class="fieldset">
+                            {{-- <fieldset class="fieldset">
                                 <legend class="text-lg fieldset-legend">No Telp</legend>
                                 <input type="text" id="no_telp" name="no_telp" class="w-full input"
                                     placeholder="No Telp" value="{{ old('no_telp') }}" />
                                 @error('no_telp')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- input tanggal pendaftaran --}}
                             <fieldset class="fieldset">
-                                <legend class="text-lg fieldset-legend">Tanggal Pendaftaran</legend>
-                                <input type="date" name="tanggal" class="w-full input"
-                                    placeholder="tanggal Pasien"
-                                    value="{{ old('tanggal', now()->format('Y-m-d')) }}" />
+                                <legend class="text-lg fieldset-legend">Tanggal & Waktu Pendaftaran</legend>
+                                <input type="datetime-local" name="tanggal" class="w-full input"
+                                    placeholder="Tanggal & Waktu Pendaftaran"
+                                    value="{{ old('tanggal', now()->format('Y-m-d\TH:i')) }}" />
                                 @error('tanggal')
                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                 @enderror

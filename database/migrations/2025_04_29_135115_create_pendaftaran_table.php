@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid();
             $table->unsignedBigInteger('pasien_id');
             $table->string('no_rm');
-            $table->date('tanggal');
+            $table->dateTime('tanggal');
             $table->enum('status', ['selesai', 'menunggu']);
             $table->timestamps();
 

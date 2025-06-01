@@ -156,13 +156,17 @@
                                     <td>Tanggal Kontrol</td>
                                     <td>{{ $data->tanggal_kontrol ?? '-' }}</td>
                                 </tr>
+                                <tr>
+                                    <td>Keterangan Lain</td>
+                                    <td>{{ $data->keterangan_lain ?? '-' }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     @if (!$data->pelayanan->nama == 'umum')
                         <h2 class="py-2 mt-2 text-lg font-semibold">Informasi Pemeriksaan Tambahan : </h2>
                     @endif
-                    <div class="overflow-x-auto text-lg border rounded-box border-base-content/5 bg-base-100">
+                    <div class="mt-2 overflow-x-auto text-lg border rounded-box border-base-content/5 bg-base-100">
                         <table class="table">
                             <tbody>
                                 {{-- anc, ibu hamil, kia --}}

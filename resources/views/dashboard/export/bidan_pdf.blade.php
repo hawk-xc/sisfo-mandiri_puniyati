@@ -6,24 +6,68 @@
     <title>{{ $fileName }}</title>
     <style>
         /* Gunakan font serif yang tersedia secara universal */
+
         body {
             font-family: "Times New Roman", Times, serif;
             margin: 0;
             padding: 20px;
             color: #000;
-            /* Warna hitam penuh untuk kontras lebih baik */
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 15px;
+        /* Container utama untuk memusatkan konten */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .header h2 {
-            margin: 3px 0;
-            font-size: 12pt;
-            /* Gunakan pt untuk ukuran font yang konsisten di PDF */
+        /* Header dengan logo dan teks */
+        .header-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .logo-container {
+            flex-shrink: 0;
+            position: absolute;
+            left: 13rem;
+            top: 1rem;
+        }
+
+        .text-content {
+            flex-grow: 1;
+            margin-left: 1rem;
+        }
+
+        .header-title {
+            margin: 0;
+            font-size: 14pt;
             font-weight: bold;
+            text-align: center;
+        }
+
+        .header-info {
+            margin: 3px 0;
+            font-size: 9pt;
+            text-align: center;
+        }
+
+        .report-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12pt;
+            margin: 15px 0;
+            padding-top: 10px;
+            border-top: 1px solid #000;
         }
 
         table {
@@ -103,16 +147,32 @@
 </head>
 
 <body>
-    <div class="header">
-        <h2 class="font-bold">DATA BIDAN</h2>
-        <p class="font-bold">KLINIK NGUDI WALUYO</p>
-        <img src="https://imgs.search.brave.com/o6HZrFQfBPc_U8OgcyveQgzFC0aGpOtDXMjSEnJaTD8/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9hcG9s/bG8ub2x4LmNvLmlk/L3YxL2ZpbGVzL2Vn/aWtiamFkejQ0eS1J/RC9pbWFnZTtzPTI3/Mngw.jpeg"
-            alt="app_logo">
+    <div class="header-wrapper">
+        <div class="header-content">
+            <div class="logo-container">
+                @php
+                    $imagePath = public_path('assets/images/bidan_delima_logo.png');
+                    $imageData = file_get_contents($imagePath);
+                    $base64 = 'data:image/png;base64,' . base64_encode($imageData);
+                @endphp
+                <img src="{{ $base64 }}" alt="logo" style="height: 70px;">
+            </div>
+            <div class="text-content">
+                <h1 class="header-title">BIDAN PRAKTIK MANDIRI PUNIYATI A.Md Keb</h1>
+                <p class="header-info">Nomor SIPB: 0026/SIPB/33.11/VI/2019</p>
+                <p class="header-info">Dusun Kalipelang, RT 01/RW 07, Desa Demakan, Kecamatan Mojolaban, Kabupaten
+                    Sukoharjo</p>
+            </div>
+        </div>
+
+        <div class="report-title">
+            LAPORAN DATA BIDAN
+        </div>
 
         @if ($dateRange)
-            <p style="font-size: 9pt;">Rentang Tanggal: {{ $dateRange }}</p>
+            <p class="header-info">Rentang Tanggal: {{ $dateRange }}</p>
         @endif
-        <p style="font-size: 9pt;">Tanggal Export: {{ $currentDate }}</p>
+        <p class="header-info">Tanggal Export: {{ $currentDate }}</p>
     </div>
 
     <table>
